@@ -117,11 +117,13 @@ class MainProcess {
                 contextIsolation: true,
                 preload: path.join(__dirname, 'preload.js')
             },
-            titleBarStyle: 'hidden',
-            titleBarOverlay: {
+            titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
+            titleBarOverlay: process.platform !== 'darwin' ? {
                 color: '#333333',
-                symbolColor: '#cccccc'
-            }
+                symbolColor: '#cccccc',
+                height: 32
+            } : false,
+            title: 'Noter'
         })
 
         const isDev = process.argv.includes('--dev')

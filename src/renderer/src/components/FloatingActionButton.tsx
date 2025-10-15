@@ -112,6 +112,7 @@ export const FloatingActionButton: React.FC = () => {
           active:scale-95
         `}
                 title="Click: New Note | Long Press: More Options"
+                data-testid="fab-button"
             >
                 <Plus size={24} />
             </button>

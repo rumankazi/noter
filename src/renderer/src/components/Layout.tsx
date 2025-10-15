@@ -22,12 +22,18 @@ export const Layout: React.FC = () => {
         }
     }
 
+    // Detect macOS to adjust title bar padding for traffic light buttons
+    const isMacOS = window.electronAPI?.platform === 'darwin' || navigator.userAgent.includes('Mac OS X')
+
     return (
         <div className="h-screen flex flex-col bg-vscode-background relative">
-            {/* Title Bar - Draggable area */}
+            {/* Title Bar - Draggable area with platform-specific padding */}
             <div
                 className="h-8 bg-vscode-titleBar flex items-center px-2 select-none"
-                style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
+                style={{
+                    WebkitAppRegion: 'drag',
+                    paddingLeft: isMacOS ? '80px' : '8px'
+                } as React.CSSProperties}
             >
                 <span className="text-xs text-vscode-foreground opacity-80">Noter</span>
             </div>

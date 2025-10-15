@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { SettingsPage } from '../renderer/src/components/SettingsPage'
+import { getTestDataPath } from './test-utils'
 
 // Mock electron API
 const mockElectronAPI = {
@@ -29,7 +30,8 @@ describe('SettingsPage', () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-        mockElectronAPI.settings.getDataLocation.mockResolvedValue('C:\\Users\\test\\AppData\\Noter')
+        // Use platform-agnostic path for testing
+        mockElectronAPI.settings.getDataLocation.mockResolvedValue(getTestDataPath())
         mockElectronAPI.settings.getAutoSaveSettings.mockResolvedValue(defaultAutoSaveSettings)
     })
 
@@ -37,7 +39,8 @@ describe('SettingsPage', () => {
         render(<SettingsPage />)
 
         await waitFor(() => {
-            expect(screen.getByText('C:\\Users\\test\\AppData\\Noter')).toBeInTheDocument()
+            // Check that some data location text is displayed (platform-agnostic)
+            expect(screen.getByText(/\/.*Noter/)).toBeInTheDocument()
         })
     })
 

@@ -18,6 +18,9 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
     onSave,
     hasUnsavedChanges
 }) => {
+    // Detect platform to avoid window controls
+    const isMacOS = window.electronAPI?.platform === 'darwin' || navigator.userAgent.includes('Mac OS X')
+
     return (
         <div
             className="flex items-center justify-between px-4 py-2 bg-vscode-editorBackground border-b border-vscode-border"
@@ -31,7 +34,7 @@ export const EditorHeader: React.FC<EditorHeaderProps> = ({
 
             <div
                 className="flex items-center space-x-2"
-                style={{ marginRight: '120px' }}
+                style={{ marginRight: isMacOS ? '120px' : '8px' }}
                 data-testid="editor-header-buttons"
             >
                 <button

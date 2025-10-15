@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { EditorHeader } from '../renderer/src/components/EditorHeader'
+import { getExpectedButtonMargin, mockPlatform } from './test-utils'
 
 // Mock the app store
 const mockUseAppStore = vi.fn()
@@ -32,8 +33,38 @@ describe('EditorHeader - Icon Buttons and Save State', () => {
         const buttonContainer = screen.getByTestId('editor-header-buttons')
         const computedStyle = getComputedStyle(buttonContainer)
 
-        // Should have sufficient right margin to avoid overlapping with window controls
+        // Should have platform-appropriate right margin to avoid overlapping with window controls
+        // macOS needs more space (120px) due to traffic lights on the left pushing content right
+        // Other platforms need less space (8px) as controls are on the right
+        const platform = (window as any).electronAPI?.platform || process.platform
+        const expectedMargin = getExpectedButtonMargin(platform)
+        expect(computedStyle.marginRight).toBe(expectedMargin)
+    })
+
+    it('should adapt button positioning for different platforms', () => {
+        // Test macOS behavior
+        mockPlatform('darwin')
+        const { rerender } = render(<EditorHeader {...mockProps} />)
+
+        let buttonContainer = screen.getByTestId('editor-header-buttons')
+        let computedStyle = getComputedStyle(buttonContainer)
         expect(computedStyle.marginRight).toBe('120px')
+
+        // Test Windows behavior
+        mockPlatform('win32')
+        rerender(<EditorHeader {...mockProps} />)
+
+        buttonContainer = screen.getByTestId('editor-header-buttons')
+        computedStyle = getComputedStyle(buttonContainer)
+        expect(computedStyle.marginRight).toBe('8px')
+
+        // Test Linux behavior
+        mockPlatform('linux')
+        rerender(<EditorHeader {...mockProps} />)
+
+        buttonContainer = screen.getByTestId('editor-header-buttons')
+        computedStyle = getComputedStyle(buttonContainer)
+        expect(computedStyle.marginRight).toBe('8px')
     })
 
     it('should have proper spacing between buttons', () => {

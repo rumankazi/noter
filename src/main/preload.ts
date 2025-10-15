@@ -2,6 +2,9 @@ import { contextBridge, ipcRenderer } from 'electron'
 
 // Define the API that will be exposed to the renderer process
 const electronAPI = {
+    // Platform info
+    platform: process.platform,
+
     // Notes
     notes: {
         getAll: () => ipcRenderer.invoke('notes:getAll'),
