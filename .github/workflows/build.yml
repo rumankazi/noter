@@ -8,22 +8,22 @@ on:
   workflow_dispatch:
     inputs:
       release_type:
-        description: 'Type of release to create'
+        description: "Type of release to create"
         required: false
-        default: 'auto'
+        default: "auto"
         type: choice
         options:
-          - 'auto'
-          - 'patch'
-          - 'minor'
-          - 'major'
+          - "auto"
+          - "patch"
+          - "minor"
+          - "major"
       skip_tests:
-        description: 'Skip running tests (use with caution)'
+        description: "Skip running tests (use with caution)"
         required: false
         default: false
         type: boolean
       force_release:
-        description: 'Force a release even if no changes warrant one'
+        description: "Force a release even if no changes warrant one"
         required: false
         default: false
         type: boolean
@@ -161,7 +161,7 @@ jobs:
         run: |
           echo "🔍 Running semantic-release in dry-run mode to preview changes..."
           echo ""
-          
+
           # Capture the dry-run output
           if pnpm semantic-release --dry-run > dry-run-output.txt 2>&1; then
             echo "✅ Semantic-release dry-run completed successfully!"
@@ -199,9 +199,9 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            
+
             let comment = '## 🚀 Release Preview\n\n';
-            
+
             try {
               const output = fs.readFileSync('dry-run-output.txt', 'utf8');
               
@@ -243,19 +243,19 @@ jobs:
               comment += `❌ **Error running release preview:** ${error.message}\n\n`;
               comment += `Please check the workflow logs for more details.`;
             }
-            
+
             // Find existing comment to update or create new one
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-            
+
             const existingComment = comments.find(comment => 
               comment.user.login === 'github-actions[bot]' && 
               comment.body.includes('🚀 Release Preview')
             );
-            
+
             if (existingComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -421,32 +421,32 @@ jobs:
         run: |
           echo "🚀 Starting semantic-release process..."
           echo "📋 Trigger: ${{ steps.release-trigger.outputs.trigger }}"
-          
+
           if [[ "${{ steps.release-trigger.outputs.type }}" == "manual" ]]; then
             echo "🔧 Release Type: ${{ steps.release-trigger.outputs.release_type }}"
             echo "🔄 Force Release: ${{ steps.release-trigger.outputs.force_release }}"
             echo "⚡ Skip Tests: ${{ steps.release-trigger.outputs.skip_tests }}"
           fi
           echo ""
-          
+
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           # Build semantic-release command with options
           SEMANTIC_RELEASE_CMD="pnpm semantic-release"
-          
+
           # Add force release flag if specified
           if [[ "${{ steps.release-trigger.outputs.force_release }}" == "true" ]]; then
             echo "⚠️ Force release enabled - will attempt to create a release even without significant changes"
           fi
-          
+
           # Note: Manual release type selection would require custom semantic-release config
           # For now, we'll let semantic-release determine the version based on commits
           if [[ "${{ steps.release-trigger.outputs.release_type }}" != "auto" ]]; then
             echo "ℹ️ Manual release type '${{ steps.release-trigger.outputs.release_type }}' specified"
             echo "   This will be respected if there are changes that warrant a release"
           fi
-          
+
           if eval $SEMANTIC_RELEASE_CMD; then
             echo ""
             echo "✅ Semantic-release completed successfully!"
