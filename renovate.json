@@ -26,7 +26,7 @@
       ],
       "automerge": true,
       "automergeType": "pr",
-      "requiredStatusChecks": null
+      "ignoreTests": true
     },
     {
       "description": "Auto-merge patch updates for production dependencies",
@@ -40,7 +40,7 @@
       ],
       "automerge": true,
       "automergeType": "pr",
-      "requiredStatusChecks": null
+      "ignoreTests": true
     },
     {
       "description": "Group all non-major dev dependencies",
@@ -65,72 +65,72 @@
     },
     {
       "description": "Group TypeScript ecosystem updates",
-      "matchPackagePatterns": [
-        "^@types/",
-        "typescript",
-        "ts-",
-        "tsx"
-      ],
-      "groupName": "TypeScript ecosystem"
+      "groupName": "TypeScript ecosystem",
+      "matchPackageNames": [
+        "/^@types//",
+        "/typescript/",
+        "/ts-/",
+        "/tsx/"
+      ]
     },
     {
       "description": "Group ESLint ecosystem updates",
-      "matchPackagePatterns": [
-        "eslint",
-        "^@typescript-eslint/"
-      ],
-      "groupName": "ESLint ecosystem"
+      "groupName": "ESLint ecosystem",
+      "matchPackageNames": [
+        "/eslint/",
+        "/^@typescript-eslint//"
+      ]
     },
     {
       "description": "Group Vite ecosystem updates",
-      "matchPackagePatterns": [
-        "vite",
-        "^@vitejs/"
-      ],
-      "groupName": "Vite ecosystem"
+      "groupName": "Vite ecosystem",
+      "matchPackageNames": [
+        "/vite/",
+        "/^@vitejs//"
+      ]
     },
     {
       "description": "Group testing ecosystem updates",
-      "matchPackagePatterns": [
-        "vitest",
-        "playwright",
-        "^@playwright/",
-        "jsdom"
-      ],
-      "groupName": "Testing ecosystem"
+      "groupName": "Testing ecosystem",
+      "matchPackageNames": [
+        "/vitest/",
+        "/playwright/",
+        "/^@playwright//",
+        "/jsdom/"
+      ]
     },
     {
       "description": "Group Electron ecosystem updates",
-      "matchPackagePatterns": [
-        "electron",
-        "^@electron/",
-        "electron-builder"
-      ],
-      "groupName": "Electron ecosystem"
+      "groupName": "Electron ecosystem",
+      "matchPackageNames": [
+        "/electron/",
+        "/^@electron//",
+        "/electron-builder/"
+      ]
     },
     {
       "description": "Group React ecosystem updates",
-      "matchPackagePatterns": [
-        "react",
-        "^@types/react"
-      ],
-      "groupName": "React ecosystem"
+      "groupName": "React ecosystem",
+      "matchPackageNames": [
+        "/react/",
+        "/^@types/react/"
+      ]
     },
     {
       "description": "Group Tailwind CSS ecosystem updates",
-      "matchPackagePatterns": [
-        "tailwindcss",
-        "^@tailwindcss/"
-      ],
-      "groupName": "Tailwind CSS ecosystem"
+      "groupName": "Tailwind CSS ecosystem",
+      "matchPackageNames": [
+        "/tailwindcss/",
+        "/^@tailwindcss//"
+      ]
     },
     {
       "description": "Group semantic-release ecosystem updates",
-      "matchPackagePatterns": [
-        "semantic-release",
-        "^@semantic-release/"
-      ],
-      "groupName": "Semantic Release ecosystem"
+      "groupName": "Semantic Release ecosystem",
+      "matchPackageNames": [
+        "/semantic-release/",
+        "/^@semantic-release//"
+      ]
     },
     {
       "description": "Separate major updates (require manual review)",
