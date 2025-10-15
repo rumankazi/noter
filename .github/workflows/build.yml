@@ -2,7 +2,7 @@ name: Build and Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, test-release]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -37,31 +37,8 @@ jobs:
 
   build:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    strategy:
-      matrix:
-        include:
-          - os: windows-latest
-            platform: win
-            artifact_name: noter-windows
-            artifact_path: |
-              release/*.exe
-              release/*.msi
-          - os: macos-latest
-            platform: mac
-            artifact_name: noter-macos
-            artifact_path: |
-              release/*.dmg
-              release/*.zip
-          - os: ubuntu-latest
-            platform: linux
-            artifact_name: noter-linux
-            artifact_path: |
-              release/*.AppImage
-              release/*.deb
-              release/*.rpm
-
-    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test-release')
+    runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -86,18 +63,20 @@ jobs:
       - name: Build application
         run: pnpm build
 
-      - name: Package application
-        run: pnpm package:${{ matrix.platform }}
+      - name: Package macOS application
+        run: pnpm package:mac
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Skip code signing on CI to avoid warnings
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
-      - name: Upload artifacts
+      - name: Upload macOS artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.artifact_path }}
+          name: noter-macos
+          path: |
+            release/*.dmg
+            release/*.zip
           retention-days: 7
 
   release:
@@ -130,17 +109,29 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Download all artifacts
+      - name: Download macOS artifacts
         uses: actions/download-artifact@v4
         with:
+          name: noter-macos
           path: artifacts
 
       - name: Organize release files
         run: |
           mkdir -p release
-          # Move all build artifacts to release directory
-          find artifacts -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.zip" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" \) -exec mv {} release/ \;
+          # Move macOS build artifacts to release directory
+          find artifacts -type f \( -name "*.dmg" -o -name "*.zip" \) -exec mv {} release/ \;
           ls -la release/
+
+      - name: Debug Git configuration
+        run: |
+          echo "Git remote URL:"
+          git remote -v
+          echo "Git config:"
+          git config --list | grep -E "(user\.|remote\.)"
+          echo "Current branch:"
+          git branch -a
+          echo "Git status:"
+          git status
 
       - name: Run semantic-release
         env:
@@ -152,4 +143,5 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          pnpm semantic-release
+          echo "Starting semantic-release..."
+          pnpm semantic-release --debug

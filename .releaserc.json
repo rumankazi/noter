@@ -1,6 +1,7 @@
 {
     "branches": [
-        "main"
+        "main",
+        "test-release"
     ],
     "preset": "conventionalcommits",
     "plugins": [
@@ -148,28 +149,12 @@
             {
                 "assets": [
                     {
-                        "path": "release/*.exe",
-                        "label": "Windows Installer (${nextRelease.gitTag})"
-                    },
-                    {
                         "path": "release/*.dmg",
                         "label": "macOS Installer (${nextRelease.gitTag})"
                     },
                     {
                         "path": "release/*.zip",
                         "label": "macOS Archive (${nextRelease.gitTag})"
-                    },
-                    {
-                        "path": "release/*.AppImage",
-                        "label": "Linux AppImage (${nextRelease.gitTag})"
-                    },
-                    {
-                        "path": "release/*.deb",
-                        "label": "Linux DEB (${nextRelease.gitTag})"
-                    },
-                    {
-                        "path": "release/*.rpm",
-                        "label": "Linux RPM (${nextRelease.gitTag})"
                     }
                 ],
                 "successComment": "🎉 This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version}",
