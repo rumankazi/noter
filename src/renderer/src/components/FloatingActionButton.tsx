@@ -5,7 +5,7 @@ import { useAppStore } from '../stores/appStore'
 export const FloatingActionButton: React.FC = () => {
     const { createNewNote, createNewFolder } = useAppStore()
     const [isExpanded, setIsExpanded] = React.useState(false)
-    const [longPressTimer, setLongPressTimer] = React.useState<NodeJS.Timeout | null>(null)
+    const [longPressTimer, setLongPressTimer] = React.useState<ReturnType<typeof setTimeout> | null>(null)
     const [isLongPress, setIsLongPress] = React.useState(false)
 
     const handleMouseDown = () => {

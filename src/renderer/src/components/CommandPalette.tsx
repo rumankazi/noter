@@ -60,7 +60,7 @@ export const CommandPalette: React.FC = () => {
             cmd.description.toLowerCase().includes(query.toLowerCase()) ||
             cmd.category.toLowerCase().includes(query.toLowerCase())
         )
-    }, [query])
+    }, [query, commands, setCommandPaletteOpen, createNewFolder])
 
     // Focus input on mount
     React.useEffect(() => {
