@@ -38,7 +38,30 @@ jobs:
   build:
     needs: test
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test-release')
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+        include:
+          - os: macos-latest
+            platform: mac
+            artifact_name: noter-macos
+            artifact_patterns: |
+              release/*.dmg
+              release/*.zip
+          - os: windows-latest
+            platform: win
+            artifact_name: noter-windows
+            artifact_patterns: |
+              release/*.exe
+              release/*-portable.exe
+          - os: ubuntu-latest
+            platform: linux
+            artifact_name: noter-linux
+            artifact_patterns: |
+              release/*.AppImage
+              release/*.deb
+              release/*.rpm
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -60,24 +83,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install system dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3-dev libatk-bridge2.0-dev libxss1 libasound2-dev
+
       - name: Build application
         run: pnpm build
 
-      - name: Package macOS application
-        run: pnpm package:mac
+      - name: Package application
+        run: pnpm package:${{ matrix.platform }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Skip code signing on CI to avoid warnings
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
-      - name: Upload macOS artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: noter-macos
-          path: |
-            release/*.dmg
-            release/*.zip
-          retention-days: 7
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_patterns }}
+          retention-days: 1
 
   release:
     needs: build
@@ -109,17 +136,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Download macOS artifacts
+      - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          name: noter-macos
           path: artifacts
 
       - name: Organize release files
         run: |
           mkdir -p release
-          # Move macOS build artifacts to release directory
-          find artifacts -type f \( -name "*.dmg" -o -name "*.zip" \) -exec mv {} release/ \;
+          # Move all build artifacts to release directory
+          find artifacts -type f \( -name "*.dmg" -o -name "*.zip" -o -name "*.exe" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" \) -exec mv {} release/ \;
+          echo "Release files:"
           ls -la release/
 
       - name: Debug Git configuration

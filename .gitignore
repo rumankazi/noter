@@ -140,3 +140,7 @@ release
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Tests
+test-results
+playwright-report

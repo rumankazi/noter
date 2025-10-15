@@ -149,15 +149,35 @@
             {
                 "assets": [
                     {
-                        "path": "release/*.dmg",
+                        "path": "release/*-mac-*.dmg",
                         "label": "macOS Installer (${nextRelease.gitTag})"
                     },
                     {
-                        "path": "release/*.zip",
+                        "path": "release/*-mac-*.zip",
                         "label": "macOS Archive (${nextRelease.gitTag})"
+                    },
+                    {
+                        "path": "release/*-win-*.exe",
+                        "label": "Windows Installer (${nextRelease.gitTag})"
+                    },
+                    {
+                        "path": "release/*-portable.exe",
+                        "label": "Windows Portable (${nextRelease.gitTag})"
+                    },
+                    {
+                        "path": "release/*-linux-*.AppImage",
+                        "label": "Linux AppImage (${nextRelease.gitTag})"
+                    },
+                    {
+                        "path": "release/*-linux-*.deb",
+                        "label": "Linux DEB Package (${nextRelease.gitTag})"
+                    },
+                    {
+                        "path": "release/*-linux-*.rpm",
+                        "label": "Linux RPM Package (${nextRelease.gitTag})"
                     }
                 ],
-                "successComment": "🎉 This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version}",
+                "successComment": "🎉 This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version}\n\n**Downloads:**\n- 🍎 macOS: `.dmg` installer or `.zip` archive\n- 🪟 Windows: `.exe` installer or portable executable\n- 🐧 Linux: `.AppImage` (universal), `.deb` (Debian/Ubuntu), or `.rpm` (RedHat/Fedora)",
                 "labels": [
                     "released"
                 ],
