@@ -33,8 +33,8 @@ describe('AutoSaveSettings', () => {
         render(<AutoSaveSettings />)
 
         await waitFor(() => {
-            // Should default to minutes view showing 2
-            expect(screen.getByDisplayValue('2')).toBeInTheDocument()
+            // Should show 120 seconds
+            expect(screen.getByDisplayValue('120')).toBeInTheDocument()
         })
 
         const focusChangeToggle = screen.getByLabelText(/auto-save on focus change/i)
@@ -64,14 +64,14 @@ describe('AutoSaveSettings', () => {
         render(<AutoSaveSettings />)
 
         await waitFor(() => {
-            expect(screen.getByDisplayValue('2')).toBeInTheDocument()
+            expect(screen.getByDisplayValue('120')).toBeInTheDocument()
         })
 
-        const intervalInput = screen.getByDisplayValue('2')
-        fireEvent.change(intervalInput, { target: { value: '5' } })
+        const intervalInput = screen.getByDisplayValue('120')
+        fireEvent.change(intervalInput, { target: { value: '300' } })
         fireEvent.blur(intervalInput)
 
-        // 5 minutes = 300 seconds
+        // 300 seconds = 5 minutes
         expect(mockElectronAPI.settings.setAutoSaveSettings).toHaveBeenCalledWith({
             ...defaultSettings,
             intervalSeconds: 300
@@ -82,7 +82,7 @@ describe('AutoSaveSettings', () => {
         render(<AutoSaveSettings />)
 
         await waitFor(() => {
-            expect(screen.getByDisplayValue('2')).toBeInTheDocument()
+            expect(screen.getByDisplayValue('120')).toBeInTheDocument()
         })
 
         expect(screen.getByText(/automatically save notes when switching between notes or losing focus/i)).toBeInTheDocument()
@@ -96,10 +96,10 @@ describe('AutoSaveSettings', () => {
         render(<AutoSaveSettings />)
 
         await waitFor(() => {
-            expect(screen.getByDisplayValue('2')).toBeInTheDocument()
+            expect(screen.getByDisplayValue('120')).toBeInTheDocument()
         })
 
-        const intervalInput = screen.getByDisplayValue('2')
+        const intervalInput = screen.getByDisplayValue('120')
         expect(intervalInput).toBeDisabled()
     })
 })
