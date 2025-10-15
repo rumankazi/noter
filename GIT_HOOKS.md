@@ -19,15 +19,18 @@ Noter uses **Husky** to run automated checks before commits and pushes, ensuring
 
 ---
 
-### 📝 Commit Message Hook
+### 📝 Commit Message Hook (commitlint)
 **Runs on:** `git commit`
 
 **What it does:**
-- ✅ Validates commit message format
+- ✅ Validates commit message format with **commitlint**
 - ✅ Ensures Conventional Commits standard
 - ✅ Prevents non-semantic commits
+- ✅ Professional validation with detailed error messages
 
 **Purpose:** Maintain consistent commit history for semantic-release
+
+**Powered by:** `@commitlint/cli` + `@commitlint/config-conventional`
 
 **Required format:**
 ```bash
@@ -148,24 +151,18 @@ git commit -m "feat: fixed feature"
 ### ❌ Invalid Commit Message
 ```bash
 git commit -m "Add new feature"
-# ❌ Invalid commit message format!
+# ⧗   input: Add new feature
+# ✖   subject may not be empty [subject-empty]
+# ✖   type may not be empty [type-empty]
 #
-# Commit messages must follow the Conventional Commits format:
-#
-#   <type>[optional scope]: <description>
-#
-# Examples:
-#   ✅ feat: add dark mode
-#   ✅ fix: resolve auto-save bug
-#
-# Your commit message:
-#   ❌ Add new feature
+# ✖   found 2 problems, 0 warnings
+# ⓘ   Get help: https://github.com/conventional-changelog/commitlint
 ```
 
 **Fix:**
 ```bash
 git commit -m "feat: add new feature"
-# ✅ Valid format
+# ✅ Valid format - commit allowed
 ```
 
 ### ❌ Test Failure
@@ -298,7 +295,31 @@ Time: ~30-60 seconds
 
 ## Hook Configuration
 
-### Lint-Staged (.package.json)
+### Commitlint (commitlint.config.js)
+```javascript
+export default {
+    extends: ['@commitlint/config-conventional'],
+    rules: {
+        'type-enum': [
+            2,
+            'always',
+            ['feat', 'fix', 'docs', 'style', 'refactor', 
+             'perf', 'test', 'build', 'ci', 'chore', 'revert']
+        ],
+        'subject-case': [0],
+        'subject-empty': [2, 'never'],
+        'type-empty': [2, 'never']
+    }
+};
+```
+
+**What it validates:**
+- Must have a valid type (feat, fix, etc.)
+- Must have a non-empty subject
+- Type must be lowercase
+- Follows conventional commits specification
+
+### Lint-Staged (package.json)
 ```json
 "lint-staged": {
   "*.{ts,tsx}": [
