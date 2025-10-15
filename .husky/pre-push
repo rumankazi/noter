@@ -1,0 +1,41 @@
+echo "🔍 Running pre-push validation..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Run linting
+echo "📝 Linting code..."
+pnpm lint
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Linting failed. Fix the errors above before pushing."
+  echo "💡 Run 'pnpm lint:fix' to auto-fix some issues."
+  exit 1
+fi
+echo "✅ Linting passed"
+echo ""
+
+# Run tests
+echo "🧪 Running tests..."
+pnpm test --run
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Tests failed. Fix the failing tests before pushing."
+  exit 1
+fi
+echo "✅ Tests passed"
+echo ""
+
+# Build application
+echo "🏗️  Building application..."
+pnpm build
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Build failed. Fix the build errors before pushing."
+  exit 1
+fi
+echo "✅ Build passed"
+echo ""
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✨ All checks passed! Proceeding with push..."
+echo ""
