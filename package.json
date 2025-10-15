@@ -1,6 +1,6 @@
 {
     "name": "noter",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A simple, local note-taking app that just works",
     "main": "dist/main/main/main.js",
     "type": "module",
