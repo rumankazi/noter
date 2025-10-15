@@ -46,7 +46,7 @@ importers:
         version: 13.0.0
       zustand:
         specifier: ^5.0.8
-        version: 5.0.8(@types/react@19.2.2)(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0))
+        version: 5.0.8(@types/react@19.2.2)(react@19.2.0)
     devDependencies:
       '@commitlint/cli':
         specifier: ^20.1.0
@@ -4187,11 +4187,6 @@ packages:
   url-join@5.0.0:
     resolution: {integrity: sha512-n2huDr9h9yzd6exQVnH/jU5mr+Pfx08LRXXZhkLLetAMESRj+anQsTAh940iMrIetKAmry9coFuZQ2jY8/p3WA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
-  use-sync-external-store@1.6.0:
-    resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   utf8-byte-length@1.0.5:
     resolution: {integrity: sha512-Xn0w3MtiQ6zoz2vFyUVruaCL53O/DwUvkEeOvj+uulMm0BkUGYWmBYVyElqZaSLhY6ZD0ulfU3aBra2aVT4xfA==}
@@ -8872,11 +8867,6 @@ snapshots:
 
   url-join@5.0.0: {}
 
-  use-sync-external-store@1.6.0(react@19.2.0):
-    dependencies:
-      react: 19.2.0
-    optional: true
-
   utf8-byte-length@1.0.5: {}
 
   util-deprecate@1.0.2: {}
@@ -9097,10 +9087,9 @@ snapshots:
 
   zod@4.1.12: {}
 
-  zustand@5.0.8(@types/react@19.2.2)(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0)):
+  zustand@5.0.8(@types/react@19.2.2)(react@19.2.0):
     optionalDependencies:
       '@types/react': 19.2.2
       react: 19.2.0
-      use-sync-external-store: 1.6.0(react@19.2.0)
 
   zwitch@2.0.4: {}
