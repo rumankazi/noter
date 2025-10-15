@@ -1,3 +1,9 @@
+# Skip pre-push validation in CI environments
+if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
+  echo "🤖 Running in CI - skipping pre-push validation"
+  exit 0
+fi
+
 echo "🔍 Running pre-push validation..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
