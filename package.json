@@ -31,6 +31,7 @@
         "package:all": "pnpm build && pnpm icons && electron-builder --win --mac --linux",
         "release": "pnpm validate && pnpm package:all",
         "semantic-release": "semantic-release",
+        "semantic-release:dry-run": "semantic-release --dry-run",
         "validate": "pnpm lint && pnpm test --run && pnpm build",
         "postinstall": "electron-builder install-app-deps && playwright install",
         "prepare": "husky"
