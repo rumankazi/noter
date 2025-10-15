@@ -2,7 +2,10 @@ import { writeFileSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 
 const packageJsonPath = 'dist/main/package.json';
-const content = JSON.stringify({ type: 'commonjs' }, null, 2);
+const content = JSON.stringify({
+    type: 'commonjs',
+    main: 'main.js'
+}, null, 2);
 
 try {
     mkdirSync(dirname(packageJsonPath), { recursive: true });
