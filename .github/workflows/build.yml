@@ -1,8 +1,6 @@
 name: Build and Release
 
 on:
-  push:
-    branches: [main, test-release]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -13,6 +11,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -108,16 +109,16 @@ jobs:
 
       - name: Package application (Linux)
         if: matrix.os == 'ubuntu-latest'
-        run: pnpm package:linux:full
+        run: pnpm package:linux
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ matrix.artifact_name }}
-      #     path: ${{ matrix.artifact_patterns }}
-      #     retention-days: 1
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_patterns }}
+          retention-days: 1
 
   release:
     needs: build
