@@ -51,7 +51,7 @@
     ],
     "shard": null,
     "updateSnapshots": "missing",
-    "updateSourceMethod": "3way",
+    "updateSourceMethod": "patch",
     "version": "1.56.0",
     "workers": 1,
     "webServer": null
@@ -83,15 +83,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 33,
+                      "duration": 57,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T20:39:21.533Z",
+                      "startTime": "2025-10-15T21:42:13.599Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -117,15 +117,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3179,
+                      "duration": 3187,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T20:39:22.155Z",
+                      "startTime": "2025-10-15T21:42:14.260Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -151,15 +151,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1532,
+                      "duration": 1533,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T20:39:25.340Z",
+                      "startTime": "2025-10-15T21:42:17.453Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -185,15 +185,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 27,
+                      "duration": 29,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T20:39:26.879Z",
+                      "startTime": "2025-10-15T21:42:18.995Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -227,15 +227,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3247,
+                      "duration": 3273,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T20:39:26.911Z",
+                      "startTime": "2025-10-15T21:42:19.029Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -261,15 +261,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 10,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 517,
+                      "duration": 515,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T20:39:30.165Z",
+                      "startTime": "2025-10-15T21:42:22.317Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -289,8 +289,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-15T20:39:20.828Z",
-    "duration": 10072.063999999315,
+    "startTime": "2025-10-15T21:42:13.209Z",
+    "duration": 9875.166,
     "expected": 6,
     "skipped": 0,
     "unexpected": 0,
