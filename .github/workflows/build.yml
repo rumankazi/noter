@@ -92,19 +92,32 @@ jobs:
       - name: Build application
         run: pnpm build
 
-      - name: Package application
-        run: pnpm package:${{ matrix.platform }}
+      - name: Package application (macOS)
+        if: matrix.os == 'macos-latest'
+        run: pnpm package:mac:dev
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Skip code signing on CI to avoid warnings
+          # Skip code signing on CI for now
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.artifact_patterns }}
-          retention-days: 1
+      - name: Package application (Windows)
+        if: matrix.os == 'windows-latest'
+        run: pnpm package:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package application (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: pnpm package:linux:full
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ matrix.artifact_name }}
+      #     path: ${{ matrix.artifact_patterns }}
+      #     retention-days: 1
 
   release:
     needs: build
@@ -149,17 +162,6 @@ jobs:
           echo "Release files:"
           ls -la release/
 
-      - name: Debug Git configuration
-        run: |
-          echo "Git remote URL:"
-          git remote -v
-          echo "Git config:"
-          git config --list | grep -E "(user\.|remote\.)"
-          echo "Current branch:"
-          git branch -a
-          echo "Git status:"
-          git status
-
       - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -171,4 +173,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           echo "Starting semantic-release..."
-          pnpm semantic-release --debug
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
+          echo "Running pnpm release (PR merged)..."
+            pnpm semantic-release --debug
+          else
+            echo "Dry run pnpm release..."
+            pnpm semantic-release --dry-run --debug
+          fi
