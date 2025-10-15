@@ -4,7 +4,10 @@
     "description": "A simple, local note-taking app that just works",
     "main": "dist/main/main/main.js",
     "type": "module",
-    "author": "rumankazi",
+    "author": {
+        "name": "rumankazi",
+        "email": "kaziruman@gmail.com"
+    },
     "license": "MIT",
     "private": false,
     "scripts": {
@@ -28,6 +31,7 @@
         "package:win:portable": "pnpm build && pnpm icons && electron-builder --win portable --config.win.sign=null",
         "package:mac": "pnpm build && pnpm icons && electron-builder --mac",
         "package:linux": "pnpm build && pnpm icons && electron-builder --linux",
+        "package:linux:full": "pnpm build && pnpm icons && electron-builder --linux --config.linux.target=[{\"target\":\"AppImage\",\"arch\":[\"x64\"]},{\"target\":\"deb\",\"arch\":[\"x64\"]},{\"target\":\"rpm\",\"arch\":[\"x64\"]}]",
         "package:all": "pnpm build && pnpm icons && electron-builder --win --mac --linux",
         "release": "pnpm validate && pnpm package:all",
         "semantic-release": "semantic-release",
@@ -183,12 +187,6 @@
                 },
                 {
                     "target": "deb",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "rpm",
                     "arch": [
                         "x64"
                     ]
