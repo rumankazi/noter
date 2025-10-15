@@ -1,0 +1,191 @@
+{
+    "name": "noter",
+    "version": "1.0.0",
+    "description": "A simple, local note-taking app that just works",
+    "main": "dist/main/main.js",
+    "type": "module",
+    "author": "rumankazi",
+    "license": "MIT",
+    "private": false,
+    "scripts": {
+        "dev": "pnpm build:main && concurrently \"pnpm dev:renderer\" \"pnpm dev:main\"",
+        "dev:renderer": "vite",
+        "dev:main": "tsc -p tsconfig.main.json && node scripts/create-main-package.js && electron dist/main/main.js --dev",
+        "build": "pnpm build:renderer && pnpm build:main",
+        "build:renderer": "vite build",
+        "build:main": "tsc -p tsconfig.main.json && node scripts/create-main-package.js",
+        "test": "vitest",
+        "test:ui": "vitest --ui",
+        "test:e2e": "playwright test",
+        "lint": "eslint src",
+        "lint:fix": "eslint src --fix",
+        "package": "pnpm build && electron-builder",
+        "package:dir": "pnpm build && electron-builder --dir",
+        "package:win": "pnpm build && electron-builder --win",
+        "package:mac": "pnpm build && electron-builder --mac",
+        "package:linux": "pnpm build && electron-builder --linux",
+        "package:all": "pnpm build && electron-builder --win --mac --linux",
+        "semantic-release": "semantic-release",
+        "postinstall": "electron-builder install-app-deps"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.37.0",
+        "@playwright/test": "^1.56.0",
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/git": "^10.0.1",
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.0",
+        "@testing-library/user-event": "^14.6.1",
+        "@types/node": "^22.10.6",
+        "@types/react": "^18.3.26",
+        "@types/react-dom": "^18.3.7",
+        "@types/sql.js": "^1.4.9",
+        "@typescript-eslint/eslint-plugin": "^8.46.1",
+        "@typescript-eslint/parser": "^8.46.1",
+        "@vitejs/plugin-react": "^5.0.4",
+        "@vitest/ui": "^3.2.4",
+        "autoprefixer": "^10.4.21",
+        "concurrently": "^9.2.1",
+        "conventional-changelog-conventionalcommits": "^8.0.0",
+        "electron": "^38.2.2",
+        "electron-builder": "^26.0.12",
+        "electron-builder-squirrel-windows": "26.0.12",
+        "eslint": "^9.37.0",
+        "eslint-plugin-react-hooks": "^7.0.0",
+        "eslint-plugin-react-refresh": "^0.4.24",
+        "jsdom": "^27.0.0",
+        "postcss": "^8.5.6",
+        "semantic-release": "^24.2.0",
+        "tailwindcss": "^3.4.18",
+        "typescript": "^5.9.3",
+        "vite": "^7.1.10",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "@tailwindcss/typography": "^0.5.19",
+        "@types/markdown-it": "^14.1.2",
+        "clsx": "^2.1.1",
+        "date-fns": "^4.1.0",
+        "highlight.js": "^11.11.1",
+        "lucide-react": "^0.545.0",
+        "markdown-it": "^14.1.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-markdown": "^10.1.0",
+        "sql.js": "^1.13.0",
+        "uuid": "^13.0.0",
+        "zustand": "^5.0.8"
+    },
+    "build": {
+        "appId": "com.rumankazi.noter",
+        "productName": "Noter",
+        "directories": {
+            "output": "release",
+            "buildResources": "build"
+        },
+        "files": [
+            "dist/**/*",
+            "node_modules/**/*",
+            "package.json"
+        ],
+        "extraResources": [
+            {
+                "from": "public",
+                "to": "public",
+                "filter": [
+                    "**/*"
+                ]
+            }
+        ],
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64",
+                        "ia32"
+                    ]
+                },
+                {
+                    "target": "portable",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "icon": "build/icon.ico",
+            "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+        },
+        "nsis": {
+            "oneClick": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "Noter"
+        },
+        "portable": {
+            "artifactName": "${productName}-${version}-portable.${ext}"
+        },
+        "mac": {
+            "category": "public.app-category.productivity",
+            "target": [
+                {
+                    "target": "dmg",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                },
+                {
+                    "target": "zip",
+                    "arch": [
+                        "x64",
+                        "arm64"
+                    ]
+                }
+            ],
+            "icon": "build/icon.icns",
+            "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+        },
+        "dmg": {
+            "contents": [
+                {
+                    "x": 130,
+                    "y": 220
+                },
+                {
+                    "x": 410,
+                    "y": 220,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ]
+        },
+        "linux": {
+            "target": [
+                {
+                    "target": "AppImage",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "deb",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "rpm",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "category": "Office",
+            "icon": "build/icon.png",
+            "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+        }
+    }
+}
