@@ -1,8 +1,6 @@
 name: Build and Release
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -13,6 +11,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -37,30 +38,30 @@ jobs:
 
   build:
     needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/test-release')
     strategy:
       matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
         include:
-          - os: windows-latest
-            platform: win
-            artifact_name: noter-windows
-            artifact_path: |
-              release/*.exe
-              release/*.msi
           - os: macos-latest
             platform: mac
             artifact_name: noter-macos
-            artifact_path: |
+            artifact_patterns: |
               release/*.dmg
               release/*.zip
+          - os: windows-latest
+            platform: win
+            artifact_name: noter-windows
+            artifact_patterns: |
+              release/*.exe
+              release/*-portable.exe
           - os: ubuntu-latest
             platform: linux
             artifact_name: noter-linux
-            artifact_path: |
+            artifact_patterns: |
               release/*.AppImage
               release/*.deb
               release/*.rpm
-
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -83,22 +84,41 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install system dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3-dev libatk-bridge2.0-dev libxss1 libasound2-dev
+
       - name: Build application
         run: pnpm build
 
-      - name: Package application
-        run: pnpm package:${{ matrix.platform }}
+      - name: Package application (macOS)
+        if: matrix.os == 'macos-latest'
+        run: pnpm package:mac:dev
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Skip code signing on CI to avoid warnings
+          # Skip code signing on CI for now
           CSC_IDENTITY_AUTO_DISCOVERY: false
+
+      - name: Package application (Windows)
+        if: matrix.os == 'windows-latest'
+        run: pnpm package:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package application (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: pnpm package:linux
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.artifact_path }}
-          retention-days: 7
+          path: ${{ matrix.artifact_patterns }}
+          retention-days: 1
 
   release:
     needs: build
@@ -139,7 +159,8 @@ jobs:
         run: |
           mkdir -p release
           # Move all build artifacts to release directory
-          find artifacts -type f \( -name "*.exe" -o -name "*.msi" -o -name "*.dmg" -o -name "*.zip" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" \) -exec mv {} release/ \;
+          find artifacts -type f \( -name "*.dmg" -o -name "*.zip" -o -name "*.exe" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" \) -exec mv {} release/ \;
+          echo "Release files:"
           ls -la release/
 
       - name: Run semantic-release
@@ -152,4 +173,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          pnpm semantic-release
+          echo "Starting semantic-release..."
+          if [[ "${{ github.event_name }}" == "pull_request" && "${{ github.event.pull_request.merged }}" == "true" ]]; then
+          echo "Running pnpm release (PR merged)..."
+            pnpm semantic-release --debug
+          else
+            echo "Dry run pnpm release..."
+            pnpm semantic-release --dry-run --debug
+          fi

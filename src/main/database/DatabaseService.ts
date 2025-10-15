@@ -10,7 +10,24 @@ export class DatabaseService {
 
     constructor() {
         const userDataPath = app.getPath('userData')
-        this.dbPath = path.join(userDataPath, 'noter.db')
+
+
+
+        // Use a separate test database if we're in test mode
+        // Playwright launches with Electron executable, so check for typical test patterns
+        const isTestMode = process.argv.includes('--test') ||
+            process.env.NODE_ENV === 'test' ||
+            process.argv[0].includes('electron') ||  // Playwright uses electron executable
+            process.execPath.includes('electron')
+
+        if (isTestMode) {
+            // Use a temporary database path for tests
+            this.dbPath = path.join(userDataPath, `noter-test-${Date.now()}.db`)
+            console.log('Running in test mode, using database:', this.dbPath)
+        } else {
+            this.dbPath = path.join(userDataPath, 'noter.db')
+            console.log('Running in production mode, using database:', this.dbPath)
+        }
     }
 
     async initialize(): Promise<void> {
@@ -135,6 +152,22 @@ export class DatabaseService {
         if (this.db) {
             this.save()
             this.db.close()
+        }
+    }
+
+    cleanup(): void {
+        if (this.db) {
+            this.db.close()
+        }
+
+        // Delete test database file if it exists
+        if (fs.existsSync(this.dbPath) && this.dbPath.includes('test')) {
+            try {
+                fs.unlinkSync(this.dbPath)
+                console.log('Cleaned up test database:', this.dbPath)
+            } catch (error) {
+                console.error('Error cleaning up test database:', error)
+            }
         }
     }
 }

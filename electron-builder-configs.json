@@ -1,0 +1,21 @@
+{
+    "dev": {
+        "mac": {
+            "identity": null,
+            "gatekeeperAssess": false,
+            "hardenedRuntime": false
+        }
+    },
+    "prod": {
+        "mac": {
+            "identity": "Developer ID Application",
+            "hardenedRuntime": true,
+            "gatekeeperAssess": false,
+            "entitlements": "build/entitlements.mac.plist",
+            "entitlementsInherit": "build/entitlements.mac.plist",
+            "notarize": {
+                "teamId": "${APPLE_TEAM_ID}"
+            }
+        }
+    }
+}
