@@ -1,6 +1,6 @@
 import React from 'react'
 import { Trash2 } from 'lucide-react'
-import { Note } from '@shared/types'
+import { Note } from '../../../shared/types'
 import { useAppStore } from '../stores/appStore'
 import { MarkdownEditor } from './MarkdownEditor'
 
@@ -134,7 +134,7 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({ note }) => {
     }
 
     return (
-        <div className="h-full flex flex-col">
+        <div className="h-full flex flex-col" data-testid="note-editor">
             {/* Title Input */}
             <div className="border-b border-vscode-border bg-vscode-background p-3 flex items-center gap-2">
                 <input

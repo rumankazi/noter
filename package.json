@@ -1,10 +1,13 @@
 {
     "name": "noter",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A simple, local note-taking app that just works",
     "main": "dist/main/main/main.js",
     "type": "module",
-    "author": "rumankazi",
+    "author": {
+        "name": "rumankazi",
+        "email": "kaziruman@gmail.com"
+    },
     "license": "MIT",
     "private": false,
     "scripts": {
@@ -27,7 +30,10 @@
         "package:win": "pnpm build && pnpm icons && electron-builder --win",
         "package:win:portable": "pnpm build && pnpm icons && electron-builder --win portable --config.win.sign=null",
         "package:mac": "pnpm build && pnpm icons && electron-builder --mac",
+        "package:mac:dev": "pnpm build && pnpm icons && electron-builder --mac --config.mac.identity=null",
+        "package:mac:prod": "pnpm build && pnpm icons && electron-builder --mac --config.mac.identity=\"Developer ID Application\" --config.mac.hardenedRuntime=true",
         "package:linux": "pnpm build && pnpm icons && electron-builder --linux",
+        "package:linux:full": "pnpm build && pnpm icons && electron-builder --linux --config.linux.target=[{\"target\":\"AppImage\",\"arch\":[\"x64\"]},{\"target\":\"deb\",\"arch\":[\"x64\"]},{\"target\":\"rpm\",\"arch\":[\"x64\"]}]",
         "package:all": "pnpm build && pnpm icons && electron-builder --win --mac --linux",
         "release": "pnpm validate && pnpm package:all",
         "semantic-release": "semantic-release",
@@ -69,7 +75,7 @@
         "lint-staged": "^16.2.4",
         "postcss": "^8.5.6",
         "semantic-release": "^24.2.9",
-        "tailwindcss": "^4.0.0",
+        "tailwindcss": "^3.4.16",
         "typescript": "^5.9.3",
         "vite": "^7.1.10",
         "vitest": "^3.2.4"
@@ -158,7 +164,10 @@
                 }
             ],
             "icon": "build/icon.icns",
-            "artifactName": "${productName}-${version}-${os}-${arch}.${ext}"
+            "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+            "identity": null,
+            "gatekeeperAssess": false,
+            "hardenedRuntime": false
         },
         "dmg": {
             "contents": [
@@ -184,12 +193,6 @@
                 },
                 {
                     "target": "deb",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "rpm",
                     "arch": [
                         "x64"
                     ]

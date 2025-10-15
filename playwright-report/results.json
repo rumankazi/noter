@@ -72,7 +72,7 @@
           "specs": [
             {
               "title": "should launch and show main window",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -85,48 +85,18 @@
                     {
                       "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 5015,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Noter/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Noter/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n\n    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:31:28",
-                        "location": {
-                          "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                          "column": 28,
-                          "line": 31
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 29 |\u001b[39m\n \u001b[90m 30 |\u001b[39m         \u001b[90m// Check app title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Noter/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m     test(\u001b[32m'should create a new note'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                            "column": 28,
-                            "line": 31
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveTitle\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/Noter/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveTitle\" with timeout 5000ms\u001b[22m\n\u001b[2m    9 × unexpected value \"\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 29 |\u001b[39m\n \u001b[90m 30 |\u001b[39m         \u001b[90m// Check app title\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m         \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveTitle(\u001b[35m/Noter/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                            \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m     test(\u001b[32m'should create a new note'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:31:28\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 57,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T15:00:44.808Z",
+                      "startTime": "2025-10-15T21:42:13.599Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/rkazi_mac/projects/noter/test-results/noter-app-Noter-App-E2E-Te-d473a-launch-and-show-main-window-electron/test-failed-1.png"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                        "column": 28,
-                        "line": 31
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "614dd6900b00f89a416f-763ea080cf0336072225",
@@ -135,71 +105,7 @@
               "column": 5
             },
             {
-              "title": "should create a new note",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "electron",
-                  "projectName": "electron",
-                  "results": [
-                    {
-                      "workerIndex": 1,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 10008,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"fab-button\"]')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"fab-button\"]')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n\n    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:37:33",
-                        "location": {
-                          "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                          "column": 33,
-                          "line": 37
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[90m// Wait for the floating action button\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mconst\u001b[39m fabButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"fab-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 37 |\u001b[39m         \u001b[36mawait\u001b[39m expect(fabButton)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m         \u001b[90m// Click to create new note\u001b[39m\n \u001b[90m 40 |\u001b[39m         \u001b[36mawait\u001b[39m fabButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                            "column": 33,
-                            "line": 37
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"fab-button\"]')\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 35 |\u001b[39m         \u001b[90m// Wait for the floating action button\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mconst\u001b[39m fabButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"fab-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 37 |\u001b[39m         \u001b[36mawait\u001b[39m expect(fabButton)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 38 |\u001b[39m\n \u001b[90m 39 |\u001b[39m         \u001b[90m// Click to create new note\u001b[39m\n \u001b[90m 40 |\u001b[39m         \u001b[36mawait\u001b[39m fabButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:37:33\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-15T15:00:52.007Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/rkazi_mac/projects/noter/test-results/noter-app-Noter-App-E2E-Tests-should-create-a-new-note-electron/test-failed-1.png"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                        "column": 33,
-                        "line": 37
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "614dd6900b00f89a416f-88579404416f1c93d13a",
-              "file": "noter-app.spec.ts",
-              "line": 34,
-              "column": 5
-            },
-            {
-              "title": "should type content in note editor",
+              "title": "should create, edit, and save a complete note",
               "ok": true,
               "tags": [],
               "tests": [
@@ -211,15 +117,15 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 2,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 22,
+                      "duration": 3187,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T15:01:04.167Z",
+                      "startTime": "2025-10-15T21:42:14.260Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -227,77 +133,13 @@
                   "status": "expected"
                 }
               ],
-              "id": "614dd6900b00f89a416f-e25f98c8a2ab3a093e3f",
+              "id": "614dd6900b00f89a416f-c765db7eca33eb5e0f7a",
               "file": "noter-app.spec.ts",
-              "line": 47,
-              "column": 5
+              "line": 36,
+              "column": 9
             },
             {
-              "title": "should show notes in sidebar",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 30000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "electron",
-                  "projectName": "electron",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 8016,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"note-item\"]').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"note-item\"]').first()\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"note-item\"]').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"note-item\"]').first()\u001b[22m\n\n    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:68:37",
-                        "location": {
-                          "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                          "column": 37,
-                          "line": 68
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 66 |\u001b[39m\n \u001b[90m 67 |\u001b[39m         \u001b[90m// The note should be visible\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m expect(noteInSidebar)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 70 |\u001b[39m\n \u001b[90m 71 |\u001b[39m     test(\u001b[32m'should search for notes'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                            "column": 37,
-                            "line": 68
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"note-item\"]').first()\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"note-item\"]').first()\u001b[22m\n\n\n\u001b[0m \u001b[90m 66 |\u001b[39m\n \u001b[90m 67 |\u001b[39m         \u001b[90m// The note should be visible\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 68 |\u001b[39m         \u001b[36mawait\u001b[39m expect(noteInSidebar)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                     \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 69 |\u001b[39m     })\u001b[33m;\u001b[39m\n \u001b[90m 70 |\u001b[39m\n \u001b[90m 71 |\u001b[39m     test(\u001b[32m'should search for notes'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:68:37\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-15T15:01:04.756Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/rkazi_mac/projects/noter/test-results/noter-app-Noter-App-E2E-Tests-should-show-notes-in-sidebar-electron/test-failed-1.png"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                        "column": 37,
-                        "line": 68
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "614dd6900b00f89a416f-3c2e2a5e42b17f7872b1",
-              "file": "noter-app.spec.ts",
-              "line": 60,
-              "column": 5
-            },
-            {
-              "title": "should search for notes",
+              "title": "should search for the created note",
               "ok": true,
               "tags": [],
               "tests": [
@@ -309,7 +151,41 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1533,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-10-15T21:42:17.453Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "614dd6900b00f89a416f-fb2c36a0a6a564af971a",
+              "file": "noter-app.spec.ts",
+              "line": 79,
+              "column": 5
+            },
+            {
+              "title": "should be able to select and view the created note",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "electron",
+                  "projectName": "electron",
+                  "results": [
+                    {
+                      "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
                       "duration": 29,
@@ -317,7 +193,7 @@
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T15:01:14.397Z",
+                      "startTime": "2025-10-15T21:42:18.995Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -325,9 +201,9 @@
                   "status": "expected"
                 }
               ],
-              "id": "614dd6900b00f89a416f-16d4d684a768fdf5674e",
+              "id": "614dd6900b00f89a416f-8089703aee8630441897",
               "file": "noter-app.spec.ts",
-              "line": 71,
+              "line": 100,
               "column": 5
             }
           ]
@@ -335,12 +211,12 @@
         {
           "title": "Noter App Stability Tests",
           "file": "noter-app.spec.ts",
-          "line": 87,
+          "line": 114,
           "column": 6,
           "specs": [
             {
-              "title": "should handle rapid note creation",
-              "ok": false,
+              "title": "should handle creating multiple notes",
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -351,52 +227,30 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 3,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "timedOut",
-                      "duration": 30004,
-                      "error": {
-                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
-                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                      },
-                      "errors": [
-                        {
-                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
-                        },
-                        {
-                          "location": {
-                            "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                            "column": 29,
-                            "line": 93
-                          },
-                          "message": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 91 |\u001b[39m         \u001b[90m// Create multiple notes quickly\u001b[39m\n \u001b[90m 92 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mlet\u001b[39m i \u001b[33m=\u001b[39m \u001b[35m0\u001b[39m\u001b[33m;\u001b[39m i \u001b[33m<\u001b[39m \u001b[35m3\u001b[39m\u001b[33m;\u001b[39m i\u001b[33m++\u001b[39m) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 93 |\u001b[39m             \u001b[36mawait\u001b[39m fabButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 94 |\u001b[39m             \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 95 |\u001b[39m         }\n \u001b[90m 96 |\u001b[39m\u001b[0m\n\u001b[2m    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:93:29\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 3273,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T15:01:14.951Z",
+                      "startTime": "2025-10-15T21:42:19.029Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/rkazi_mac/projects/noter/test-results/noter-app-Noter-App-Stabil-ae82b--handle-rapid-note-creation-electron/test-failed-1.png"
-                        }
-                      ]
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
-              "id": "614dd6900b00f89a416f-2cb0ddd1cfe4dbc8e20a",
+              "id": "614dd6900b00f89a416f-4eea77b49bc26d5c6c86",
               "file": "noter-app.spec.ts",
-              "line": 88,
+              "line": 115,
               "column": 5
             },
             {
               "title": "should handle app resize",
-              "ok": false,
+              "ok": true,
               "tags": [],
               "tests": [
                 {
@@ -407,55 +261,25 @@
                   "projectName": "electron",
                   "results": [
                     {
-                      "workerIndex": 4,
+                      "workerIndex": 0,
                       "parallelIndex": 0,
-                      "status": "failed",
-                      "duration": 5526,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"fab-button\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"fab-button\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n\n    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:108:33",
-                        "location": {
-                          "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                          "column": 33,
-                          "line": 108
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 106 |\u001b[39m         \u001b[90m// App should still be functional\u001b[39m\n \u001b[90m 107 |\u001b[39m         \u001b[36mconst\u001b[39m fabButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"fab-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 108 |\u001b[39m         \u001b[36mawait\u001b[39m expect(fabButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 109 |\u001b[39m\n \u001b[90m 110 |\u001b[39m         \u001b[90m// Resize back\u001b[39m\n \u001b[90m 111 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39msetViewportSize({ width\u001b[33m:\u001b[39m \u001b[35m1200\u001b[39m\u001b[33m,\u001b[39m height\u001b[33m:\u001b[39m \u001b[35m800\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                            "column": 33,
-                            "line": 108
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('[data-testid=\"fab-button\"]')\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-testid=\"fab-button\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 106 |\u001b[39m         \u001b[90m// App should still be functional\u001b[39m\n \u001b[90m 107 |\u001b[39m         \u001b[36mconst\u001b[39m fabButton \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"fab-button\"]'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 108 |\u001b[39m         \u001b[36mawait\u001b[39m expect(fabButton)\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 109 |\u001b[39m\n \u001b[90m 110 |\u001b[39m         \u001b[90m// Resize back\u001b[39m\n \u001b[90m 111 |\u001b[39m         \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39msetViewportSize({ width\u001b[33m:\u001b[39m \u001b[35m1200\u001b[39m\u001b[33m,\u001b[39m height\u001b[33m:\u001b[39m \u001b[35m800\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at /Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts:108:33\u001b[22m"
-                        }
-                      ],
+                      "status": "passed",
+                      "duration": 515,
+                      "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-15T15:01:46.572Z",
+                      "startTime": "2025-10-15T21:42:22.317Z",
                       "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "/Users/rkazi_mac/projects/noter/test-results/noter-app-Noter-App-Stability-Tests-should-handle-app-resize-electron/test-failed-1.png"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "/Users/rkazi_mac/projects/noter/src/tests/e2e/noter-app.spec.ts",
-                        "column": 33,
-                        "line": 108
-                      }
+                      "attachments": []
                     }
                   ],
-                  "status": "unexpected"
+                  "status": "expected"
                 }
               ],
               "id": "614dd6900b00f89a416f-53535321aa7dab5b4e01",
               "file": "noter-app.spec.ts",
-              "line": 101,
+              "line": 147,
               "column": 5
             }
           ]
@@ -465,11 +289,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2025-10-15T15:00:44.482Z",
-    "duration": 69306.901,
-    "expected": 2,
+    "startTime": "2025-10-15T21:42:13.209Z",
+    "duration": 9875.166,
+    "expected": 6,
     "skipped": 0,
-    "unexpected": 5,
+    "unexpected": 0,
     "flaky": 0
   }
 }

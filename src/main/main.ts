@@ -101,7 +101,15 @@ class MainProcess {
         app.on('before-quit', () => {
             console.log('App is quitting...')
             if (this.databaseService) {
-                this.databaseService.close()
+                // Use cleanup for test databases, regular close for production
+                if (process.argv.includes('--test') ||
+                    process.env.NODE_ENV === 'test' ||
+                    process.argv[0].includes('electron') ||
+                    process.execPath.includes('electron')) {
+                    this.databaseService.cleanup()
+                } else {
+                    this.databaseService.close()
+                }
             }
         })
     }
@@ -129,11 +137,24 @@ class MainProcess {
         const isDev = process.argv.includes('--dev')
 
         if (isDev) {
+            console.log('Loading development server...')
             this.mainWindow.loadURL('http://localhost:3000')
             this.mainWindow.webContents.openDevTools()
         } else {
-            this.mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'))
+            const rendererPath = path.join(__dirname, '../../renderer/index.html')
+            console.log('Loading renderer from:', rendererPath)
+            console.log('File exists:', fs.existsSync(rendererPath))
+            this.mainWindow.loadFile(rendererPath)
         }
+
+        // Add error handling for failed loads
+        this.mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+            console.error('Failed to load:', validatedURL, 'Error:', errorDescription)
+        })
+
+        this.mainWindow.webContents.on('did-finish-load', () => {
+            console.log('Renderer loaded successfully')
+        })
     }
 
     private createMenu() {
