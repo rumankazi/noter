@@ -16,5 +16,7 @@ export default defineConfig({
       testDir: './tests/e2e',
     },
   ],
-  // No webServer - we're testing Electron, not a web app
+  // Electron-specific configuration
+  // No browsers needed - Electron uses embedded Chromium
+  // Set PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 to skip browser downloads
 });

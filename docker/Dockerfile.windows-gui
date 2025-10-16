@@ -1,0 +1,42 @@
+# Enhanced Windows Server container with GUI support for E2E testing
+# Note: Requires Windows Docker host
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+# Use PowerShell for better scripting
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+# Set working directory
+WORKDIR C:\\app
+
+# Install Node.js
+RUN Invoke-WebRequest -Uri 'https://nodejs.org/dist/v20.18.0/node-v20.18.0-x64.msi' -OutFile 'nodejs.msi'; \
+    Start-Process -Wait -FilePath 'msiexec' -ArgumentList '/i', 'nodejs.msi', '/quiet', '/norestart'; \
+    Remove-Item 'nodejs.msi'
+
+# Add Node.js to PATH and install pnpm
+RUN $env:PATH = $env:PATH + ';C:\\Program Files\\nodejs'; \
+    [Environment]::SetEnvironmentVariable('PATH', $env:PATH, [EnvironmentVariableTarget]::Machine); \
+    npm install -g pnpm@latest
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build application
+RUN pnpm run build
+
+# Ensure Electron binaries are properly installed
+RUN cd node_modules/electron; node install.js
+
+# Set environment variables
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV NODE_ENV=test
+ENV ELECTRON_DISABLE_SANDBOX=1
+
+# Default command
+CMD ["pnpm", "run", "test:e2e"]

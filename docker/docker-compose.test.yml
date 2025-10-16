@@ -1,0 +1,64 @@
+# Cross-platform E2E testing with GUI support
+services:
+  # Ubuntu Linux E2E testing with GUI support
+  test-ubuntu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.ubuntu-gui
+    volumes:
+      - ../test-results:/app/test-results
+      - ../playwright-report:/app/playwright-report
+    environment:
+      - NODE_ENV=test
+      - ELECTRON_DISABLE_SANDBOX=1
+      - DISPLAY=:99
+    command: >
+      bash -c "
+        echo 'Starting virtual display for Ubuntu testing...'
+        Xvfb :99 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+        sleep 3
+        echo 'Running E2E tests...'
+        pnpm run test:e2e
+      "
+    mem_limit: 2g
+    cpus: 2
+
+  # macOS-like E2E testing (Alpine with GUI)
+  test-macos:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.macos-gui
+    volumes:
+      - ../test-results:/app/test-results
+      - ../playwright-report:/app/playwright-report
+    environment:
+      - NODE_ENV=test
+      - ELECTRON_DISABLE_SANDBOX=1
+      - DISPLAY=:99
+    command: >
+      sh -c "
+        echo 'Starting virtual display for macOS-like testing...'
+        Xvfb :99 -screen 0 1024x768x24 -ac +extension GLX +render -noreset &
+        sleep 3
+        echo 'Running E2E tests...'
+        pnpm run test:e2e
+      "
+    mem_limit: 2g
+    cpus: 2
+
+  # Windows E2E testing (requires Windows Docker host)
+  test-windows:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.windows-gui
+    volumes:
+      - ../test-results:C:/app/test-results
+      - ../playwright-report:C:/app/playwright-report
+    environment:
+      - NODE_ENV=test
+      - ELECTRON_DISABLE_SANDBOX=1
+    mem_limit: 4g
+    cpus: 2
+    platform: windows/amd64
+    profiles:
+      - windows # Only build when explicitly requested

@@ -1,0 +1,67 @@
+# Enhanced Ubuntu container with GUI support for E2E testing
+FROM ubuntu:22.04
+
+# Avoid prompts from apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies for GUI applications
+RUN apt-get update && apt-get install -y \
+    curl \
+    xvfb \
+    libgtk-3-0 \
+    libgbm-dev \
+    libx11-xcb1 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libxss1 \
+    libxtst6 \
+    libdrm2 \
+    libxkbcommon0 \
+    libatspi2.0-0 \
+    libasound2 \
+    libnss3 \
+    git \
+    dbus-x11 \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Install Node.js 20.x
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
+
+# Install pnpm
+RUN npm install -g pnpm@latest
+
+# Set working directory
+WORKDIR /app
+
+# Create a non-root user for Electron
+RUN useradd -ms /bin/bash electronuser && \
+    chown -R electronuser:electronuser /app
+
+# Copy package files first
+COPY --chown=electronuser:electronuser package.json pnpm-lock.yaml ./
+
+# Install dependencies (as root to handle Electron binary downloads)
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY --chown=electronuser:electronuser . .
+
+# Build the application
+RUN pnpm run build
+
+# Ensure Electron binaries are installed and fix permissions
+RUN cd node_modules/electron && node install.js && chown -R electronuser:electronuser /app
+
+# Switch to non-root user
+USER electronuser
+
+# Environment variables for GUI support
+ENV DISPLAY=:99
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
+ENV ELECTRON_DISABLE_SANDBOX=1
+
+# Default command
+CMD ["pnpm", "run", "test:e2e"]

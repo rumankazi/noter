@@ -7,6 +7,10 @@ on:
     branches: [main, develop, restructure]
   workflow_dispatch:
 
+env:
+  CI: true
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skip browser downloads since we're testing Electron
+
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -42,17 +46,33 @@ jobs:
       - name: Build application
         run: pnpm run build
 
+      - name: Setup headless display (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 3
+        if: runner.os == 'Linux'
+
       - name: Install Playwright browsers
         run: pnpm exec playwright install
 
-      - name: Run E2E tests
+      - name: Run E2E tests (Linux headless)
         run: pnpm run test:e2e
+        env:
+          DISPLAY: ':99'
+        if: runner.os == 'Linux'
+
+      - name: Run E2E tests (Windows/macOS)
+        run: pnpm run test:e2e
+        if: runner.os != 'Linux'
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: test-results-${{ matrix.os }}-${{ matrix.node-version }}
+          name: test-results-${{ matrix.os }}
           path: |
             test-results/
             playwright-report/
