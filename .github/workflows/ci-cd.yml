@@ -13,53 +13,53 @@ env:
 
 jobs:
   # Separate job for each platform to better isolate issues
-  # test-windows:
-  #   name: Test on Windows
-  #   runs-on: windows-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  test-windows:
+    name: Test on Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     - name: Configure git for consistent line endings
-  #       run: |
-  #         git config core.autocrlf false
-  #         git config core.eol lf
+      - name: Configure git for consistent line endings
+        run: |
+          git config core.autocrlf false
+          git config core.eol lf
 
-  #     - name: Setup pnpm
-  #       uses: pnpm/action-setup@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         cache: 'pnpm'
-  #         cache-dependency-path: 'pnpm-lock.yaml'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
-  #     - name: Install dependencies
-  #       run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-  #     - name: Run linter
-  #       run: pnpm run lint
-  #       env:
-  #         # Ensure consistent behavior across platforms
-  #         ESLINT_USE_FLAT_CONFIG: false
+      - name: Run linter
+        run: pnpm run lint
+        env:
+          # Ensure consistent behavior across platforms
+          ESLINT_USE_FLAT_CONFIG: false
 
-  #     - name: Run unit tests
-  #       run: pnpm run test
+      - name: Run unit tests
+        run: pnpm run test
 
-  #     - name: Build application
-  #       run: pnpm run build
+      - name: Build application
+        run: pnpm run build
 
-  #     - name: Run E2E tests
-  #       run: pnpm run test:e2e
+      - name: Run E2E tests
+        run: pnpm run test:e2e
 
-  #     - name: Upload test results
-  #       uses: actions/upload-artifact@v4
-  #       if: failure()
-  #       with:
-  #         name: test-results-windows
-  #         path: |
-  #           test-results/
-  #           playwright-report/
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results-windows
+          path: |
+            test-results/
+            playwright-report/
 
   test-macos:
     name: Test on macOS
@@ -207,17 +207,22 @@ jobs:
   #           playwright-report/
 
   build-and-package:
-    needs: [test-macos, test-ubuntu]
+    needs: [test-windows, test-macos, test-ubuntu]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
-          # Cross-compile Windows and Linux on Ubuntu (faster and no Windows signing issues)
+          # Native Linux build (fast and reliable)
           - os: ubuntu-latest
-            platform: cross-platform
-            artifact-name: noter-cross-platform
-            build-command: pnpm run dist:cross-platform
+            platform: linux
+            artifact-name: noter-linux
+            build-command: pnpm run dist:linux
+          # Native Windows build (avoids cross-compilation and signing complexities)
+          - os: windows-latest
+            platform: win32
+            artifact-name: noter-windows
+            build-command: pnpm run dist:win
           # Native macOS build (required for code signing and notarization)
           - os: macos-latest
             platform: darwin
@@ -243,12 +248,22 @@ jobs:
       - name: Build application
         run: pnpm run build
 
-      - name: Package application (Cross-platform)
-        if: matrix.platform == 'cross-platform'
+      - name: Package application (Linux)
+        if: matrix.platform == 'linux'
+        run: ${{ matrix.build-command }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Package application (Windows)
+        if: matrix.platform == 'win32'
         run: ${{ matrix.build-command }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
+          WIN_CSC_LINK: ''
+          WIN_CSC_KEY_PASSWORD: ''
+          CSC_LINK: ''
+          CSC_KEY_PASSWORD: ''
 
       - name: Package application (macOS)
         if: matrix.platform == 'darwin'
@@ -270,7 +285,7 @@ jobs:
           retention-days: 7
 
   release:
-    needs: [test-macos, test-ubuntu, build-and-package]
+    needs: [test-windows, test-macos, test-ubuntu, build-and-package]
     if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
