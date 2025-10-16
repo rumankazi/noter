@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/rumankazi/noter/compare/v1.1.0...v1.1.1) (2025-10-16)
+
+
+### Bug Fixes
+
+* mac app permissions issues ([3ede974](https://github.com/rumankazi/noter/commit/3ede974a62e428c0352f00239ec17210856f5ee3))
+
 # [1.1.0](https://github.com/rumankazi/noter/compare/v1.0.0...v1.1.0) (2025-10-16)
 
 
