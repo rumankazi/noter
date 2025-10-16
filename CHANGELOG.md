@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/rumankazi/noter/compare/v1.0.0...v1.1.0) (2025-10-16)
+
+
+### Features
+
+* add release artifacts ([f347e43](https://github.com/rumankazi/noter/commit/f347e4380a87de351291517868d6511da7d622cf))
+
 # 1.0.0 (2025-10-16)
 
 
