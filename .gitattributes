@@ -1,0 +1,45 @@
+# Ensure consistent line endings across platforms
+* text=auto eol=lf
+
+# Explicitly handle common text files
+*.js text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.less text eol=lf
+*.svg text eol=lf
+*.xml text eol=lf
+*.txt text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Windows specific files should keep CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files should not be converted
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.zip binary
+*.tar.gz binary
+*.dmg binary
+*.exe binary
+*.app binary
+*.deb binary
+*.AppImage binary

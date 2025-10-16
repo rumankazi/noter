@@ -19,11 +19,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Ensure consistent line endings across platforms
+          fetch-depth: 0
 
       - name: Configure git for consistent line endings
         run: |
           git config core.autocrlf false
           git config core.eol lf
+          # Fix line endings for existing files
+          git add --renormalize .
+          git status --porcelain
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -36,6 +42,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Normalize line endings (Windows)
+        run: |
+          # Use Prettier to fix line endings before linting
+          pnpm exec prettier --write . --loglevel warn
+        shell: bash
 
       - name: Run linter
         run: pnpm run lint
@@ -256,7 +268,10 @@ jobs:
 
       - name: Package application (Windows)
         if: matrix.platform == 'win32'
-        run: ${{ matrix.build-command }}
+        run: |
+          # Normalize line endings before packaging
+          pnpm exec prettier --write . --loglevel warn
+          ${{ matrix.build-command }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
