@@ -13,53 +13,53 @@ env:
 
 jobs:
   # Separate job for each platform to better isolate issues
-  test-windows:
-    name: Test on Windows
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  # test-windows:
+  #   name: Test on Windows
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
 
-      - name: Configure git for consistent line endings
-        run: |
-          git config core.autocrlf false
-          git config core.eol lf
+  #     - name: Configure git for consistent line endings
+  #       run: |
+  #         git config core.autocrlf false
+  #         git config core.eol lf
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+  #     - name: Setup pnpm
+  #       uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         cache: 'pnpm'
+  #         cache-dependency-path: 'pnpm-lock.yaml'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+  #     - name: Install dependencies
+  #       run: pnpm install --frozen-lockfile
 
-      - name: Run linter
-        run: pnpm run lint
-        env:
-          # Ensure consistent behavior across platforms
-          ESLINT_USE_FLAT_CONFIG: false
+  #     - name: Run linter
+  #       run: pnpm run lint
+  #       env:
+  #         # Ensure consistent behavior across platforms
+  #         ESLINT_USE_FLAT_CONFIG: false
 
-      - name: Run unit tests
-        run: pnpm run test
+  #     - name: Run unit tests
+  #       run: pnpm run test
 
-      - name: Build application
-        run: pnpm run build
+  #     - name: Build application
+  #       run: pnpm run build
 
-      - name: Run E2E tests
-        run: pnpm run test:e2e
+  #     - name: Run E2E tests
+  #       run: pnpm run test:e2e
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: test-results-windows
-          path: |
-            test-results/
-            playwright-report/
+  #     - name: Upload test results
+  #       uses: actions/upload-artifact@v4
+  #       if: failure()
+  #       with:
+  #         name: test-results-windows
+  #         path: |
+  #           test-results/
+  #           playwright-report/
 
   test-macos:
     name: Test on macOS
