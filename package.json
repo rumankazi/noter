@@ -50,6 +50,7 @@
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac",
     "dist:linux": "electron-builder --linux",
+    "dist:cross-platform": "electron-builder --publish=never --win --linux",
     "dist:all": "electron-builder --publish=never --win --mac --linux",
     "clean:cache": "npx electron-builder install-app-deps --force",
     "release": "semantic-release"

@@ -213,18 +213,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
-            platform: win32
-            artifact-name: noter-windows
-            build-command: pnpm run dist:win
+          # Cross-compile Windows and Linux on Ubuntu (faster and no Windows signing issues)
+          - os: ubuntu-latest
+            platform: cross-platform
+            artifact-name: noter-cross-platform
+            build-command: pnpm run dist:cross-platform
+          # Native macOS build (required for code signing and notarization)
           - os: macos-latest
             platform: darwin
             artifact-name: noter-macos
             build-command: pnpm run dist:mac
-          - os: ubuntu-latest
-            platform: linux
-            artifact-name: noter-linux
-            build-command: pnpm run dist:linux
 
     steps:
       - name: Checkout code
@@ -245,20 +243,15 @@ jobs:
       - name: Build application
         run: pnpm run build
 
-      - name: Package application (Windows)
-        if: matrix.platform == 'win32'
+      - name: Package application (Cross-platform)
+        if: matrix.platform == 'cross-platform'
         run: ${{ matrix.build-command }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
-          WIN_CSC_LINK: ''
-          WIN_CSC_KEY_PASSWORD: ''
-          CSC_LINK: ''
-          CSC_KEY_PASSWORD: ''
-          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
-      - name: Package application (macOS/Linux)
-        if: matrix.platform != 'win32'
+      - name: Package application (macOS)
+        if: matrix.platform == 'darwin'
         run: ${{ matrix.build-command }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
