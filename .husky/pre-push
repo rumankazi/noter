@@ -5,6 +5,13 @@ if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
 fi
 
 echo "🧪 Running tests before push..."
+echo "🔨 Building the project..."
+pnpm build
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed! Push cancelled."
+  exit 1
+fi
+
 echo "📋 Running unit tests..."
 pnpm test --passWithNoTests
 
