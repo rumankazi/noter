@@ -1,57 +1,32 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron';
 
-// Define the API that will be exposed to the renderer process
-const electronAPI = {
-    // Platform info
-    platform: process.platform,
+/**
+ * Preload script for secure communication between main and renderer processes
+ * Exposes safe APIs to the renderer process through contextBridge
+ */
 
-    // Notes
-    notes: {
-        getAll: () => ipcRenderer.invoke('notes:getAll'),
-        getById: (id: string) => ipcRenderer.invoke('notes:getById', id),
-        create: (note: any) => ipcRenderer.invoke('notes:create', note),
-        update: (note: any) => ipcRenderer.invoke('notes:update', note),
-        delete: (id: string) => ipcRenderer.invoke('notes:delete', id),
-        search: (query: string) => ipcRenderer.invoke('notes:search', query)
-    },
-
-    // Folders
-    folders: {
-        getAll: () => ipcRenderer.invoke('folders:getAll'),
-        create: (folder: any) => ipcRenderer.invoke('folders:create', folder),
-        update: (folder: any) => ipcRenderer.invoke('folders:update', folder),
-        delete: (id: string) => ipcRenderer.invoke('folders:delete', id)
-    },
-
-    // Settings
-    settings: {
-        getDataLocation: () => ipcRenderer.invoke('settings:getDataLocation'),
-        setDataLocation: (path: string) => ipcRenderer.invoke('settings:setDataLocation', path),
-        openDirectoryDialog: () => ipcRenderer.invoke('settings:openDirectoryDialog'),
-        getDatabaseSize: () => ipcRenderer.invoke('settings:getDatabaseSize'),
-        getAutoSaveSettings: () => ipcRenderer.invoke('settings:getAutoSaveSettings'),
-        setAutoSaveSettings: (settings: any) => ipcRenderer.invoke('settings:setAutoSaveSettings', settings),
-        exportData: () => ipcRenderer.invoke('settings:exportData'),
-        importData: () => ipcRenderer.invoke('settings:importData')
-    },
-
-    // Menu events
-    onMenuEvent: (callback: (event: string) => void) => {
-        ipcRenderer.on('menu:new-note', () => callback('new-note'))
-        ipcRenderer.on('menu:new-folder', () => callback('new-folder'))
-        ipcRenderer.on('menu:save', () => callback('save'))
-        ipcRenderer.on('menu:command-palette', () => callback('command-palette'))
-    },
-
-    removeAllListeners: () => {
-        ipcRenderer.removeAllListeners('menu:new-note')
-        ipcRenderer.removeAllListeners('menu:new-folder')
-        ipcRenderer.removeAllListeners('menu:save')
-        ipcRenderer.removeAllListeners('menu:command-palette')
-    }
+// Define the API interface for type safety
+export interface ElectronAPI {
+    // App-related APIs
+    getVersion: () => Promise<string>;
+    getPlatform: () => Promise<string>;
+    quit: () => Promise<void>;
 }
 
-contextBridge.exposeInMainWorld('electronAPI', electronAPI)
+// Expose protected methods that allow the renderer process to use
+// the ipcRenderer without exposing the entire object
+const electronAPI: ElectronAPI = {
+    getVersion: () => ipcRenderer.invoke('app:get-version'),
+    getPlatform: () => ipcRenderer.invoke('app:get-platform'),
+    quit: () => ipcRenderer.invoke('app:quit')
+};
 
-// Type definition for the renderer process
-export type ElectronAPI = typeof electronAPI
+// Expose the API to the renderer process
+contextBridge.exposeInMainWorld('electronAPI', electronAPI);
+
+// Type declarations for the renderer process
+declare global {
+    interface Window {
+        electronAPI: ElectronAPI;
+    }
+}

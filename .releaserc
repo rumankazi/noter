@@ -1,0 +1,35 @@
+{
+    "branches": [
+        "main"
+    ],
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        "@semantic-release/changelog",
+        "@semantic-release/npm",
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                        "path": "release/*.exe",
+                        "label": "Windows Installer"
+                    },
+                    {
+                        "path": "release/*.dmg",
+                        "label": "macOS Installer"
+                    },
+                    {
+                        "path": "release/*.AppImage",
+                        "label": "Linux AppImage"
+                    },
+                    {
+                        "path": "release/*.deb",
+                        "label": "Linux DEB Package"
+                    }
+                ]
+            }
+        ],
+        "@semantic-release/git"
+    ]
+}

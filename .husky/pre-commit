@@ -1,7 +1,0 @@
-# Skip pre-commit validation in CI environments
-if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
-  echo "🤖 Running in CI - skipping pre-commit validation"
-  exit 0
-fi
-
-pnpm lint-staged

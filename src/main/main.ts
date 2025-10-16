@@ -1,121 +1,55 @@
-import { app, BrowserWindow, ipcMain, Menu, dialog } from 'electron'
-import path from 'path'
-import os from 'os'
-import fs from 'fs'
-import { DatabaseService } from './database/DatabaseService'
-import { NoteService } from './services/NoteService'
-import { FolderService } from './services/FolderService'
-import { DefaultFolderService } from './services/DefaultFolderService'
-import { SettingsService } from './services/SettingsService'
+import { app, BrowserWindow, ipcMain } from 'electron';
+import * as path from 'path';
+import { isDev } from './utils/environment';
 
-class MainProcess {
-    private mainWindow: BrowserWindow | null = null
-    private databaseService: DatabaseService
-    private noteService: NoteService
-    private folderService: FolderService
-    private defaultFolderService: DefaultFolderService
-    private settingsService: SettingsService
-    private isReady = false
+// Fix GPU process issues on Windows
+app.commandLine.appendSwitch('disable-gpu-sandbox');
+app.commandLine.appendSwitch('no-sandbox');
+app.disableHardwareAcceleration();
+
+/**
+ * Main Electron process entry point
+ * Handles application lifecycle and window management
+ */
+class NoterApplication {
+    private mainWindow: BrowserWindow | null = null;
 
     constructor() {
-        // Fix GPU process issues on Windows
-        app.commandLine.appendSwitch('--disable-gpu')
-        app.commandLine.appendSwitch('--disable-gpu-sandbox')
-        app.commandLine.appendSwitch('--disable-software-rasterizer')
-        app.commandLine.appendSwitch('--disable-features', 'VizDisplayCompositor')
-        app.commandLine.appendSwitch('--disable-gpu-compositing')
-        app.commandLine.appendSwitch('--disable-gpu-rasterization')
-        app.commandLine.appendSwitch('--no-sandbox')
-
-        this.databaseService = new DatabaseService()
-        this.noteService = new NoteService(this.databaseService)
-        this.folderService = new FolderService(this.databaseService)
-        this.defaultFolderService = new DefaultFolderService(this.databaseService)
-        this.settingsService = new SettingsService(this.databaseService)
-
-        this.setupApp()
+        this.initializeApp();
     }
 
-    private async initializeServices() {
-        try {
-            console.log('Initializing database...')
-            await this.databaseService.initialize()
-            console.log('Database initialized successfully')
-
-            console.log('Initializing default folder...')
-            await this.defaultFolderService.initialize()
-            console.log('Default folder initialized successfully')
-
-            console.log('Initializing settings service...')
-            this.settingsService.initialize()
-            console.log('Settings service initialized successfully')
-
-            this.setupIPC()
-            this.isReady = true
-            console.log('Services initialized successfully')
-        } catch (error) {
-            console.error('Failed to initialize services:', error)
-            throw error
-        }
-    }
-
-    private setupApp() {
-        // Add process error handlers
-        process.on('uncaughtException', (error) => {
-            console.error('Uncaught Exception:', error)
-        })
-
-        process.on('unhandledRejection', (reason, promise) => {
-            console.error('Unhandled Rejection at:', promise, 'reason:', reason)
-        })
-
-        app.whenReady().then(async () => {
-            try {
-                console.log('App ready, initializing services...')
-                await this.initializeServices()
-                console.log('Services initialized, creating window...')
-                this.createWindow()
-                this.createMenu()
-                console.log('Window created successfully')
-            } catch (error) {
-                console.error('Failed to initialize app:', error)
-                app.quit()
-            }
+    /**
+     * Initialize the Electron application
+     */
+    private initializeApp(): void {
+        // Handle app ready event
+        app.whenReady().then(() => {
+            this.createMainWindow();
+            this.setupIpcHandlers();
 
             app.on('activate', () => {
+                // On macOS, re-create window when dock icon is clicked
                 if (BrowserWindow.getAllWindows().length === 0) {
-                    this.createWindow()
+                    this.createMainWindow();
                 }
-            })
-        }).catch(error => {
-            console.error('App whenReady failed:', error)
-            app.quit()
-        })
+            });
+        });
 
+        // Handle window closed events
         app.on('window-all-closed', () => {
+            // On macOS, keep app running even when all windows are closed
             if (process.platform !== 'darwin') {
-                app.quit()
+                app.quit();
             }
-        })
-
-        app.on('before-quit', () => {
-            console.log('App is quitting...')
-            if (this.databaseService) {
-                // Use cleanup for test databases, regular close for production
-                if (process.argv.includes('--test') ||
-                    process.env.NODE_ENV === 'test' ||
-                    process.argv[0].includes('electron') ||
-                    process.execPath.includes('electron')) {
-                    this.databaseService.cleanup()
-                } else {
-                    this.databaseService.close()
-                }
-            }
-        })
+        });
     }
 
-    private createWindow() {
-        this.mainWindow = new BrowserWindow({
+    /**
+     * Create the main application window
+     */
+    private createMainWindow(): void {
+        // Simple window configuration to avoid rendering issues
+        const windowConfig: Electron.BrowserWindowConstructorOptions = {
             width: 1200,
             height: 800,
             minWidth: 800,
@@ -125,358 +59,211 @@ class MainProcess {
                 contextIsolation: true,
                 preload: path.join(__dirname, 'preload.js')
             },
-            titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
-            titleBarOverlay: process.platform !== 'darwin' ? {
-                color: '#333333',
-                symbolColor: '#cccccc',
-                height: 32
-            } : false,
-            title: 'Noter'
-        })
+            show: false, // Don't show until ready
+            resizable: true,
+            maximizable: true,
+            minimizable: true,
+            closable: true,
+            fullscreenable: true
+        };
 
-        const isDev = process.argv.includes('--dev')
-
-        if (isDev) {
-            console.log('Loading development server...')
-            this.mainWindow.loadURL('http://localhost:3000')
-            this.mainWindow.webContents.openDevTools()
-        } else {
-            const rendererPath = path.join(__dirname, '../../renderer/index.html')
-            console.log('Loading renderer from:', rendererPath)
-            console.log('File exists:', fs.existsSync(rendererPath))
-            this.mainWindow.loadFile(rendererPath)
+        // Keep platform-specific configurations minimal to avoid rendering issues
+        if (process.platform === 'darwin') {
+            // macOS specific configurations - only add if needed
+            windowConfig.titleBarStyle = 'hiddenInset';
+            windowConfig.trafficLightPosition = { x: 20, y: 20 };
+        } else if (process.platform === 'linux') {
+            // Linux specific configurations
+            windowConfig.icon = path.join(__dirname, '../renderer/assets/icon.png');
         }
+        // Windows uses default settings - no special configuration needed
 
-        // Add error handling for failed loads
-        this.mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-            console.error('Failed to load:', validatedURL, 'Error:', errorDescription)
-        })
+        this.mainWindow = new BrowserWindow(windowConfig);
+
+        // Add debugging for renderer process
+        this.mainWindow.webContents.on('did-start-loading', () => {
+            console.log('Renderer: Started loading');
+        });
 
         this.mainWindow.webContents.on('did-finish-load', () => {
-            console.log('Renderer loaded successfully')
-        })
+            console.log('Renderer: Finished loading');
+        });
+
+        this.mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+            console.error('Renderer: Failed to load', errorCode, errorDescription, validatedURL);
+        });
+
+        this.mainWindow.webContents.on('dom-ready', () => {
+            console.log('Renderer: DOM ready');
+        });
+
+        this.mainWindow.webContents.on('page-title-updated', (event, title) => {
+            console.log('Renderer: Page title updated to:', title);
+        });
+
+        // Load the renderer process
+        if (isDev()) {
+            this.mainWindow.loadURL('http://localhost:3000');
+            this.mainWindow.webContents.openDevTools();
+        } else {
+            this.mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+        }
+
+        // Show window when ready to prevent visual flash
+        this.mainWindow.once('ready-to-show', () => {
+            if (this.mainWindow) {
+                this.mainWindow.show();
+                this.mainWindow.focus();
+                console.log('Noter application started successfully');
+            }
+        });        // Handle window closed
+        this.mainWindow.on('closed', () => {
+            this.mainWindow = null;
+        });
+
+        // Handle window state changes
+        this.setupWindowStateHandlers();
+
+        // Setup platform-specific menu
+        this.setupApplicationMenu();
     }
 
-    private createMenu() {
-        const template = [
-            {
-                label: 'File',
-                submenu: [
-                    {
-                        label: 'New Note',
-                        accelerator: 'CmdOrCtrl+N',
-                        click: () => {
-                            this.mainWindow?.webContents.send('menu:new-note')
-                        }
-                    },
-                    {
-                        label: 'New Folder',
-                        accelerator: 'CmdOrCtrl+Shift+N',
-                        click: () => {
-                            this.mainWindow?.webContents.send('menu:new-folder')
-                        }
-                    },
-                    { type: 'separator' },
-                    {
-                        label: 'Save',
-                        accelerator: 'CmdOrCtrl+S',
-                        click: () => {
-                            this.mainWindow?.webContents.send('menu:save')
-                        }
-                    }
-                ]
-            },
-            {
-                label: 'Edit',
-                submenu: [
-                    { role: 'undo' },
-                    { role: 'redo' },
-                    { type: 'separator' },
-                    { role: 'cut' },
-                    { role: 'copy' },
-                    { role: 'paste' }
-                ]
-            },
-            {
-                label: 'View',
-                submenu: [
-                    {
-                        label: 'Command Palette',
-                        accelerator: 'CmdOrCtrl+Shift+P',
-                        click: () => {
-                            this.mainWindow?.webContents.send('menu:command-palette')
-                        }
-                    },
-                    { type: 'separator' },
-                    { role: 'reload' },
-                    { role: 'forceReload' },
-                    { role: 'toggleDevTools' }
-                ]
-            }
-        ]
+    /**
+     * Setup window state event handlers
+     */
+    private setupWindowStateHandlers(): void {
+        if (!this.mainWindow) return;
 
-        const menu = Menu.buildFromTemplate(template as any)
-        Menu.setApplicationMenu(menu)
+        // Save window bounds when resized or moved
+        this.mainWindow.on('resize', () => {
+            if (this.mainWindow) {
+                const bounds = this.mainWindow.getBounds();
+                console.log('Window resized:', bounds);
+            }
+        });
+
+        this.mainWindow.on('move', () => {
+            if (this.mainWindow) {
+                const bounds = this.mainWindow.getBounds();
+                console.log('Window moved:', bounds);
+            }
+        });
+
+        // Handle maximize/unmaximize
+        this.mainWindow.on('maximize', () => {
+            console.log('Window maximized');
+        });
+
+        this.mainWindow.on('unmaximize', () => {
+            console.log('Window unmaximized');
+        });
+
+        // Handle minimize/restore
+        this.mainWindow.on('minimize', () => {
+            console.log('Window minimized');
+        });
+
+        this.mainWindow.on('restore', () => {
+            console.log('Window restored');
+            // Ensure window is properly focused when restored
+            if (this.mainWindow) {
+                this.mainWindow.focus();
+            }
+        });
     }
 
-    private setupIPC() {
-        console.log('Setting up IPC handlers...')
-
-        // Notes
-        ipcMain.handle('notes:getAll', async () => {
-            try {
-                console.log('Getting all notes')
-                return this.noteService.getAllNotes()
-            } catch (error) {
-                console.error('Error getting notes:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('notes:getById', async (_, id: string) => {
-            try {
-                return this.noteService.getNoteById(id)
-            } catch (error) {
-                console.error('Error getting note by id:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('notes:create', async (_, note) => {
-            try {
-                console.log('Creating note:', note)
-                const result = this.noteService.createNote(note)
-                console.log('Note created:', result)
-                return result
-            } catch (error) {
-                console.error('Error creating note:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('notes:update', async (_, note) => {
-            return this.noteService.updateNote(note)
-        })
-
-        ipcMain.handle('notes:delete', async (_, id: string) => {
-            return this.noteService.deleteNote(id)
-        })
-
-        ipcMain.handle('notes:search', async (_, query: string) => {
-            return this.noteService.searchNotes(query)
-        })
-
-        // Folders
-        ipcMain.handle('folders:getAll', async () => {
-            try {
-                console.log('Getting all folders')
-                return this.folderService.getAllFolders()
-            } catch (error) {
-                console.error('Error getting folders:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('folders:create', async (_, folder) => {
-            try {
-                console.log('Creating folder:', folder)
-                const result = this.folderService.createFolder(folder)
-                console.log('Folder created:', result)
-                return result
-            } catch (error) {
-                console.error('Error creating folder:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('folders:update', async (_, folder) => {
-            return this.folderService.updateFolder(folder)
-        })
-
-        ipcMain.handle('folders:delete', async (_, id: string) => {
-            return this.folderService.deleteFolder(id)
-        })
-
-        // Settings
-        ipcMain.handle('settings:getDataLocation', async () => {
-            try {
-                return this.databaseService.getDataPath()
-            } catch (error) {
-                console.error('Error getting data location:', error)
-                // Return default path if database service fails
-                return path.join(os.homedir(), 'AppData', 'Local', 'Noter')
-            }
-        })
-
-        ipcMain.handle('settings:getDatabaseSize', async () => {
-            try {
-                const sizeInBytes = this.databaseService.getDatabaseSize()
-                return sizeInBytes
-            } catch (error) {
-                console.error('Error getting database size:', error)
-                return 0
-            }
-        })
-
-        ipcMain.handle('settings:setDataLocation', async (_, newPath: string) => {
-            try {
-                const currentPath = this.databaseService.getDataPath()
-                const oldDbPath = path.join(currentPath, 'noter.db')
-                const newDbPath = path.join(newPath, 'noter.db')
-
-                // Create new directory if it doesn't exist
-                if (!fs.existsSync(newPath)) {
-                    fs.mkdirSync(newPath, { recursive: true })
+    /**
+     * Setup platform-specific application menu
+     */
+    private setupApplicationMenu(): void {
+        if (process.platform === 'darwin') {
+            // macOS menu bar
+            const { Menu } = require('electron');
+            const template = [
+                {
+                    label: 'Noter',
+                    submenu: [
+                        { role: 'about' },
+                        { type: 'separator' },
+                        { role: 'services' },
+                        { type: 'separator' },
+                        { role: 'hide' },
+                        { role: 'hideothers' },
+                        { role: 'unhide' },
+                        { type: 'separator' },
+                        { role: 'quit' }
+                    ]
+                },
+                {
+                    label: 'File',
+                    submenu: [
+                        { label: 'New Note', accelerator: 'CmdOrCtrl+N' },
+                        { type: 'separator' },
+                        { role: 'close' }
+                    ]
+                },
+                {
+                    label: 'Edit',
+                    submenu: [
+                        { role: 'undo' },
+                        { role: 'redo' },
+                        { type: 'separator' },
+                        { role: 'cut' },
+                        { role: 'copy' },
+                        { role: 'paste' },
+                        { role: 'selectall' }
+                    ]
+                },
+                {
+                    label: 'View',
+                    submenu: [
+                        { role: 'reload' },
+                        { role: 'forceReload' },
+                        { role: 'toggleDevTools' },
+                        { type: 'separator' },
+                        { role: 'resetZoom' },
+                        { role: 'zoomIn' },
+                        { role: 'zoomOut' },
+                        { type: 'separator' },
+                        { role: 'togglefullscreen' }
+                    ]
+                },
+                {
+                    label: 'Window',
+                    submenu: [
+                        { role: 'minimize' },
+                        { role: 'zoom' },
+                        { type: 'separator' },
+                        { role: 'front' }
+                    ]
                 }
+            ];
 
-                // Copy database file
-                if (fs.existsSync(oldDbPath)) {
-                    fs.copyFileSync(oldDbPath, newDbPath)
-                    console.log('Database copied to new location:', newDbPath)
-                }
+            const menu = Menu.buildFromTemplate(template);
+            Menu.setApplicationMenu(menu);
+        } else {
+            // Remove menu bar on Windows/Linux for cleaner look
+            this.mainWindow?.setMenuBarVisibility(false);
+        }
+    }    /**
+     * Setup IPC (Inter-Process Communication) handlers
+     */
+    private setupIpcHandlers(): void {
+        // Hello World IPC handler for testing
+        ipcMain.handle('app:get-version', () => {
+            return app.getVersion();
+        });
 
-                this.settingsService.setSetting('dataLocation', newPath)
-                return newPath
-            } catch (error) {
-                console.error('Error setting data location:', error)
-                throw error
-            }
-        })
+        ipcMain.handle('app:get-platform', () => {
+            return process.platform;
+        });
 
-        ipcMain.handle('settings:openDirectoryDialog', async () => {
-            try {
-                if (!this.mainWindow) return null
-
-                const result = await dialog.showOpenDialog(this.mainWindow, {
-                    properties: ['openDirectory'],
-                    title: 'Select Data Storage Location',
-                    buttonLabel: 'Select Folder'
-                })
-
-                return result.canceled ? null : result.filePaths[0]
-            } catch (error) {
-                console.error('Error opening directory dialog:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('settings:getAutoSaveSettings', async () => {
-            try {
-                return this.settingsService.getAutoSaveSettings()
-            } catch (error) {
-                console.error('Error getting auto-save settings:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('settings:setAutoSaveSettings', async (_, settings) => {
-            try {
-                this.settingsService.setAutoSaveSettings(settings)
-                return settings
-            } catch (error) {
-                console.error('Error setting auto-save settings:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('settings:exportData', async () => {
-            try {
-                if (!this.mainWindow) return null
-
-                const result = await dialog.showSaveDialog(this.mainWindow, {
-                    title: 'Export Data',
-                    defaultPath: `noter-backup-${new Date().toISOString().split('T')[0]}.json`,
-                    filters: [{ name: 'JSON Files', extensions: ['json'] }]
-                })
-
-                if (result.canceled || !result.filePath) return null
-
-                // Get all notes and folders
-                const notes = this.noteService.getAllNotes()
-                const folders = this.folderService.getAllFolders()
-                const settings = this.settingsService.getAutoSaveSettings()
-
-                const exportData = {
-                    version: '1.0',
-                    exportDate: new Date().toISOString(),
-                    notes,
-                    folders,
-                    settings
-                }
-
-                fs.writeFileSync(result.filePath, JSON.stringify(exportData, null, 2))
-                console.log('Data exported to:', result.filePath)
-
-                return result.filePath
-            } catch (error) {
-                console.error('Error exporting data:', error)
-                throw error
-            }
-        })
-
-        ipcMain.handle('settings:importData', async () => {
-            try {
-                if (!this.mainWindow) return null
-
-                const result = await dialog.showOpenDialog(this.mainWindow, {
-                    title: 'Import Data',
-                    filters: [{ name: 'JSON Files', extensions: ['json'] }],
-                    properties: ['openFile']
-                })
-
-                if (result.canceled || result.filePaths.length === 0) return null
-
-                const filePath = result.filePaths[0]
-                const fileContent = fs.readFileSync(filePath, 'utf-8')
-                const importData = JSON.parse(fileContent)
-
-                // Validate import data
-                if (!importData.notes || !importData.folders) {
-                    throw new Error('Invalid backup file format')
-                }
-
-                // Import folders first (to maintain relationships)
-                let importedFolders = 0
-                for (const folder of importData.folders) {
-                    try {
-                        this.folderService.createFolder({
-                            name: folder.name,
-                            parentId: folder.parentId
-                        })
-                        importedFolders++
-                    } catch (error) {
-                        console.error('Failed to import folder:', folder.name, error)
-                    }
-                }
-
-                // Import notes
-                let importedNotes = 0
-                for (const note of importData.notes) {
-                    try {
-                        this.noteService.createNote({
-                            title: note.title,
-                            content: note.content,
-                            folderId: note.folderId
-                        })
-                        importedNotes++
-                    } catch (error) {
-                        console.error('Failed to import note:', note.title, error)
-                    }
-                }
-
-                console.log(`Import completed: ${importedNotes} notes, ${importedFolders} folders`)
-
-                return {
-                    success: true,
-                    importedNotes,
-                    importedFolders
-                }
-            } catch (error) {
-                console.error('Error importing data:', error)
-                throw error
-            }
-        })
+        // Graceful shutdown handler
+        ipcMain.handle('app:quit', () => {
+            app.quit();
+        });
     }
 }
 
-new MainProcess()
+// Create and start the application
+new NoterApplication();

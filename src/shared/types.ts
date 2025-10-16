@@ -1,48 +1,30 @@
-export interface Note {
-    id: string;
-    title: string;
-    content: string;
-    folderId?: string;
-    createdAt: Date;
-    updatedAt: Date;
+/**
+ * Shared type definitions for the Noter application
+ * Used across both main and renderer processes
+ */
+
+// Electron API interface for the renderer process
+export interface ElectronAPI {
+    // App-related APIs
+    getVersion: () => Promise<string>;
+    getPlatform: () => Promise<string>;
+    quit: () => Promise<void>;
 }
 
-export interface Folder {
-    id: string;
+// Global window interface extension
+declare global {
+    interface Window {
+        electronAPI: ElectronAPI;
+    }
+}
+
+// Platform types
+export type Platform = 'win32' | 'darwin' | 'linux';
+
+// Application configuration
+export interface AppConfig {
     name: string;
-    parentId?: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
-
-export interface CreateNoteRequest {
-    title: string;
-    content?: string;
-    folderId?: string;
-}
-
-export interface UpdateNoteRequest {
-    id: string;
-    title?: string;
-    content?: string;
-    folderId?: string;
-}
-
-export interface CreateFolderRequest {
-    name: string;
-    parentId?: string;
-}
-
-export interface UpdateFolderRequest {
-    id: string;
-    name?: string;
-    parentId?: string;
-}
-
-export interface SearchResult {
-    type: 'note' | 'folder';
-    id: string;
-    title: string;
-    excerpt?: string;
-    folderId?: string;
+    version: string;
+    platform: Platform;
+    isDevelopment: boolean;
 }
