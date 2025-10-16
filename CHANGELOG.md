@@ -1,0 +1,93 @@
+# 1.0.0 (2025-10-16)
+
+
+### Bug Fixes
+
+* action step ([ea32335](https://github.com/rumankazi/noter/commit/ea32335a7e4e6d186c1310c8a577894b2d3d3966))
+* add git user ([3e9cca5](https://github.com/rumankazi/noter/commit/3e9cca5f2771cbbf5091f5c44bec858049ae046b))
+* add git user ([d7742ec](https://github.com/rumankazi/noter/commit/d7742ecf1ba487d390cefeadc3f3e96e36a3fc91))
+* Add gitattributes for consistent line endings ([7fc78f7](https://github.com/rumankazi/noter/commit/7fc78f78081e76676d4483114200a9d4d286abb9))
+* add main entry point to dis/main/package.json ([32b61a0](https://github.com/rumankazi/noter/commit/32b61a06d7edb8b3809558e975ddc1bb1d4e09c5))
+* add main entry point to dis/main/package.json ([911d496](https://github.com/rumankazi/noter/commit/911d496072b1b76e09c26b97524a4c9bc6ef3f63))
+* build and release ([f01971b](https://github.com/rumankazi/noter/commit/f01971b62942e502e791fd9d23a0b2658f6886a1))
+* ci pipeline ([15b6f2a](https://github.com/rumankazi/noter/commit/15b6f2a2da81f5ed7cd7724067786c927ee2aa68))
+* ci pipeline ([f0f5b11](https://github.com/rumankazi/noter/commit/f0f5b1190028b6c16d9e91ad25595d8a5c3aa43c))
+* ci pipeline ([42d991f](https://github.com/rumankazi/noter/commit/42d991f2dcc35db61f04cfe6cbaa9d617c2378c9))
+* ci pipeline ([50406ce](https://github.com/rumankazi/noter/commit/50406cefc2b437bca83e665a286aa8e70fbc7650))
+* ci release ([8aea93b](https://github.com/rumankazi/noter/commit/8aea93bbf65cadc42c3f575cb7f1badb80ff1d5f))
+* correct artifact path reference in build workflow matrix ([e7d743b](https://github.com/rumankazi/noter/commit/e7d743bf046d9dd54775b5f8ed0bfba941cde967))
+* dependencies ([1b2a60f](https://github.com/rumankazi/noter/commit/1b2a60fb702ff4ff5d9de60133a1dd886b6a1193))
+* dependencies ([1d00b57](https://github.com/rumankazi/noter/commit/1d00b57e9685edc13e356e47366924964599aa81))
+* deployment ([35d790c](https://github.com/rumankazi/noter/commit/35d790cfe7d70d52e1b05a4e50bf03028a236729))
+* deployment workflow ([771f292](https://github.com/rumankazi/noter/commit/771f2921ee3b0c3da3d181acf9579f14ccfde94d))
+* dev build ([355c174](https://github.com/rumankazi/noter/commit/355c174f603db1522a991dedefede4d70a0958e5))
+* disable windows for now ([c40c798](https://github.com/rumankazi/noter/commit/c40c79822a445bd2f0e7b80e9628af30be98fc24))
+* hybrid deployment ([0846289](https://github.com/rumankazi/noter/commit/08462892afc160beaa79653d9904ab76fb0e1e1e))
+* packagemanager ([7cdb485](https://github.com/rumankazi/noter/commit/7cdb4850207afe7ed36afc023aea0df9fe0c545b))
+* pnpm version conflict ([0db897b](https://github.com/rumankazi/noter/commit/0db897b392c08f7102ff65fd991409b54c113d2a))
+* release ([61f6558](https://github.com/rumankazi/noter/commit/61f655870d4faf73687e1fb01ec2b9854044c766))
+* release ([6a98568](https://github.com/rumankazi/noter/commit/6a9856883864afdb54c7d6799a6d6a4efef31505))
+* release win ([76e5ec8](https://github.com/rumankazi/noter/commit/76e5ec84c69c4ef4246594e8a3796e0afcd78ae9))
+* release workflow ([2aba211](https://github.com/rumankazi/noter/commit/2aba21181f3e7a8764b55d1a7bd763614a2d810f))
+* renovate config ([c65b692](https://github.com/rumankazi/noter/commit/c65b69277dbaa5b1163ed0fa2185b4e14c964035))
+* resolve eslint errors for pre-push validation ([21af7a0](https://github.com/rumankazi/noter/commit/21af7a07d11574ec93e939f71085134b9a11c218))
+* test build ([c5684d8](https://github.com/rumankazi/noter/commit/c5684d878c55b877f27529eeba2adafa763c75e0))
+* test on macos ([29dcef7](https://github.com/rumankazi/noter/commit/29dcef78ae9e26c5d07579b8d189c7dfd4b5d5ba))
+* tests and dependencies ([7eff54b](https://github.com/rumankazi/noter/commit/7eff54bde5eab94c1d1e02839f1533a0d0c67a84))
+* tests: ([389607d](https://github.com/rumankazi/noter/commit/389607d6f36252d3e1987d9067dc854491dcfc33))
+* the rest of the containers ([0e36cba](https://github.com/rumankazi/noter/commit/0e36cba65c89322b4724ed393512275ed4932601))
+* ubuntu packaging ([a8b691f](https://github.com/rumankazi/noter/commit/a8b691fa64d3e9d72b3efa4a1023c485175fcb1f))
+* win packaging ([c59ab75](https://github.com/rumankazi/noter/commit/c59ab75a74f0fa9155a9b0eac6321dd7c54be2e7))
+* windows packaging ([79b57d9](https://github.com/rumankazi/noter/commit/79b57d979dd889ebfed5561b74d7d41350ded574))
+
+
+### Features
+
+* add sem release automation ([b1bff71](https://github.com/rumankazi/noter/commit/b1bff71e5f2d99e6429400890267f72626e0baa2))
+
+# 1.0.0 (2025-10-16)
+
+
+### Bug Fixes
+
+* action step ([ea32335](https://github.com/rumankazi/noter/commit/ea32335a7e4e6d186c1310c8a577894b2d3d3966))
+* add git user ([3e9cca5](https://github.com/rumankazi/noter/commit/3e9cca5f2771cbbf5091f5c44bec858049ae046b))
+* add git user ([d7742ec](https://github.com/rumankazi/noter/commit/d7742ecf1ba487d390cefeadc3f3e96e36a3fc91))
+* Add gitattributes for consistent line endings ([7fc78f7](https://github.com/rumankazi/noter/commit/7fc78f78081e76676d4483114200a9d4d286abb9))
+* add main entry point to dis/main/package.json ([32b61a0](https://github.com/rumankazi/noter/commit/32b61a06d7edb8b3809558e975ddc1bb1d4e09c5))
+* add main entry point to dis/main/package.json ([911d496](https://github.com/rumankazi/noter/commit/911d496072b1b76e09c26b97524a4c9bc6ef3f63))
+* build and release ([f01971b](https://github.com/rumankazi/noter/commit/f01971b62942e502e791fd9d23a0b2658f6886a1))
+* ci pipeline ([15b6f2a](https://github.com/rumankazi/noter/commit/15b6f2a2da81f5ed7cd7724067786c927ee2aa68))
+* ci pipeline ([f0f5b11](https://github.com/rumankazi/noter/commit/f0f5b1190028b6c16d9e91ad25595d8a5c3aa43c))
+* ci pipeline ([42d991f](https://github.com/rumankazi/noter/commit/42d991f2dcc35db61f04cfe6cbaa9d617c2378c9))
+* ci pipeline ([50406ce](https://github.com/rumankazi/noter/commit/50406cefc2b437bca83e665a286aa8e70fbc7650))
+* ci release ([8aea93b](https://github.com/rumankazi/noter/commit/8aea93bbf65cadc42c3f575cb7f1badb80ff1d5f))
+* correct artifact path reference in build workflow matrix ([e7d743b](https://github.com/rumankazi/noter/commit/e7d743bf046d9dd54775b5f8ed0bfba941cde967))
+* dependencies ([1b2a60f](https://github.com/rumankazi/noter/commit/1b2a60fb702ff4ff5d9de60133a1dd886b6a1193))
+* dependencies ([1d00b57](https://github.com/rumankazi/noter/commit/1d00b57e9685edc13e356e47366924964599aa81))
+* deployment ([35d790c](https://github.com/rumankazi/noter/commit/35d790cfe7d70d52e1b05a4e50bf03028a236729))
+* deployment workflow ([771f292](https://github.com/rumankazi/noter/commit/771f2921ee3b0c3da3d181acf9579f14ccfde94d))
+* dev build ([355c174](https://github.com/rumankazi/noter/commit/355c174f603db1522a991dedefede4d70a0958e5))
+* disable windows for now ([c40c798](https://github.com/rumankazi/noter/commit/c40c79822a445bd2f0e7b80e9628af30be98fc24))
+* hybrid deployment ([0846289](https://github.com/rumankazi/noter/commit/08462892afc160beaa79653d9904ab76fb0e1e1e))
+* packagemanager ([7cdb485](https://github.com/rumankazi/noter/commit/7cdb4850207afe7ed36afc023aea0df9fe0c545b))
+* pnpm version conflict ([0db897b](https://github.com/rumankazi/noter/commit/0db897b392c08f7102ff65fd991409b54c113d2a))
+* release ([61f6558](https://github.com/rumankazi/noter/commit/61f655870d4faf73687e1fb01ec2b9854044c766))
+* release ([6a98568](https://github.com/rumankazi/noter/commit/6a9856883864afdb54c7d6799a6d6a4efef31505))
+* release win ([76e5ec8](https://github.com/rumankazi/noter/commit/76e5ec84c69c4ef4246594e8a3796e0afcd78ae9))
+* release workflow ([2aba211](https://github.com/rumankazi/noter/commit/2aba21181f3e7a8764b55d1a7bd763614a2d810f))
+* renovate config ([c65b692](https://github.com/rumankazi/noter/commit/c65b69277dbaa5b1163ed0fa2185b4e14c964035))
+* resolve eslint errors for pre-push validation ([21af7a0](https://github.com/rumankazi/noter/commit/21af7a07d11574ec93e939f71085134b9a11c218))
+* test build ([c5684d8](https://github.com/rumankazi/noter/commit/c5684d878c55b877f27529eeba2adafa763c75e0))
+* test on macos ([29dcef7](https://github.com/rumankazi/noter/commit/29dcef78ae9e26c5d07579b8d189c7dfd4b5d5ba))
+* tests and dependencies ([7eff54b](https://github.com/rumankazi/noter/commit/7eff54bde5eab94c1d1e02839f1533a0d0c67a84))
+* tests: ([389607d](https://github.com/rumankazi/noter/commit/389607d6f36252d3e1987d9067dc854491dcfc33))
+* the rest of the containers ([0e36cba](https://github.com/rumankazi/noter/commit/0e36cba65c89322b4724ed393512275ed4932601))
+* ubuntu packaging ([a8b691f](https://github.com/rumankazi/noter/commit/a8b691fa64d3e9d72b3efa4a1023c485175fcb1f))
+* win packaging ([c59ab75](https://github.com/rumankazi/noter/commit/c59ab75a74f0fa9155a9b0eac6321dd7c54be2e7))
+* windows packaging ([79b57d9](https://github.com/rumankazi/noter/commit/79b57d979dd889ebfed5561b74d7d41350ded574))
+
+
+### Features
+
+* add sem release automation ([b1bff71](https://github.com/rumankazi/noter/commit/b1bff71e5f2d99e6429400890267f72626e0baa2))
