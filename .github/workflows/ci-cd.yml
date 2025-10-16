@@ -245,14 +245,23 @@ jobs:
       - name: Build application
         run: pnpm run build
 
-      - name: Package application
-        run: |
-          unset WIN_CSC_LINK || true
-          unset CSC_LINK || true
-          ${{ matrix.build-command }}
+      - name: Package application (Windows)
+        if: matrix.platform == 'win32'
+        run: ${{ matrix.build-command }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CSC_IDENTITY_AUTO_DISCOVERY: false
+          WIN_CSC_LINK: ''
+          WIN_CSC_KEY_PASSWORD: ''
+          CSC_LINK: ''
+          CSC_KEY_PASSWORD: ''
+          ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
+
+      - name: Package application (macOS/Linux)
+        if: matrix.platform != 'win32'
+        run: ${{ matrix.build-command }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
