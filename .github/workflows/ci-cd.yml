@@ -1,10 +1,8 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [main, develop, restructure]
   pull_request:
-    branches: [main, develop, restructure]
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -220,7 +218,7 @@ jobs:
 
   build-and-package:
     needs: [test-windows, test-macos, test-ubuntu]
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -297,7 +295,7 @@ jobs:
 
   release:
     needs: [test-windows, test-macos, test-ubuntu, build-and-package]
-    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || github.event_name == 'workflow_dispatch'
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
