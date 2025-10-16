@@ -1,6 +1,6 @@
 {
   "name": "noter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A lightweight, fast, cross-platform note-taking app that works offline",
   "main": "dist/main/main.js",
   "homepage": "https://github.com/rumankazi/noter#readme",
