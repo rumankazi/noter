@@ -11,9 +11,9 @@
   "author": "rumankazi",
   "license": "MIT",
   "private": true,
+  "packageManager": "pnpm@10.18.2",
   "engines": {
-    "node": ">=20.0.0",
-    "pnpm": ">=8.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "build": "pnpm run build:main && pnpm run build:renderer",
