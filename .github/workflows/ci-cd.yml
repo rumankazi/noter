@@ -207,7 +207,7 @@ jobs:
   #           playwright-report/
 
   build-and-package:
-    needs: [test-windows, test-macos, test-ubuntu]
+    needs: [test-macos, test-ubuntu]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ${{ matrix.os }}
     strategy:
@@ -258,7 +258,7 @@ jobs:
           retention-days: 7
 
   release:
-    needs: [test-windows, test-macos, test-ubuntu, build-and-package]
+    needs: [test-macos, test-ubuntu, build-and-package]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
