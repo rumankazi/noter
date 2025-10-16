@@ -38,6 +38,14 @@ test_packaging() {
     
     # Package
     echo "Packaging for $platform..."
+    
+    # Set environment variables for packaging (disable code signing)
+    unset WIN_CSC_LINK 2>/dev/null || true
+    unset CSC_LINK 2>/dev/null || true
+    export CSC_IDENTITY_AUTO_DISCOVERY=false
+    export WIN_CSC_LINK=""
+    export CSC_KEY_PASSWORD=""
+    
     if eval "$command"; then
         echo -e "${GREEN}✅ $platform packaging successful${NC}"
         

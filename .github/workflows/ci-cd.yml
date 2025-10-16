@@ -246,9 +246,13 @@ jobs:
         run: pnpm run build
 
       - name: Package application
-        run: ${{ matrix.build-command }}
+        run: |
+          unset WIN_CSC_LINK || true
+          unset CSC_LINK || true
+          ${{ matrix.build-command }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
