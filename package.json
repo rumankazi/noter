@@ -53,12 +53,15 @@
     "dist:cross-platform": "electron-builder --publish=never --win --linux",
     "dist:all": "electron-builder --publish=never --win --mac --linux",
     "clean:cache": "npx electron-builder install-app-deps --force",
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@playwright/test": "^1.56.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.19.21",
     "@types/react": "^18.3.12",
