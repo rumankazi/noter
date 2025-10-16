@@ -101,22 +101,6 @@ jobs:
             test-results/
             playwright-report/
 
-      - name: Package application
-        run: pnpm run dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: noter-macos
-          path: |
-            release/*.exe
-            release/*.dmg
-            release/*.AppImage
-            release/*.deb
-          retention-days: 7
-
   test-ubuntu:
     name: Test on Ubuntu
     runs-on: ubuntu-latest
@@ -190,22 +174,6 @@ jobs:
             test-results/
             playwright-report/
 
-      - name: Package application
-        run: pnpm run dist
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: noter-ubuntu
-          path: |
-            release/*.exe
-            release/*.dmg
-            release/*.AppImage
-            release/*.deb
-          retention-days: 7
-
   # Test Docker containers for comparison
   # test-docker:
   #   name: Test Docker Containers
@@ -238,8 +206,65 @@ jobs:
   #           test-results/
   #           playwright-report/
 
-  release:
+  build-and-package:
     needs: [test-macos, test-ubuntu]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win32
+            artifact-name: noter-windows
+            build-command: pnpm run dist:win
+          - os: macos-latest
+            platform: darwin
+            artifact-name: noter-macos
+            build-command: pnpm run dist:mac
+          - os: ubuntu-latest
+            platform: linux
+            artifact-name: noter-linux
+            build-command: pnpm run dist:linux
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm run build
+
+      - name: Package application
+        run: ${{ matrix.build-command }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: |
+            release/*.exe
+            release/*.dmg
+            release/*.AppImage
+            release/*.deb
+            release/*.zip
+            release/*.tar.gz
+          retention-days: 7
+
+  release:
+    needs: [test-macos, test-ubuntu, build-and-package]
     if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 

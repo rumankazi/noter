@@ -51,6 +51,7 @@
     "dist:mac": "electron-builder --mac",
     "dist:linux": "electron-builder --linux",
     "dist:all": "electron-builder --publish=never --win --mac --linux",
+    "clean:cache": "npx electron-builder install-app-deps --force",
     "release": "semantic-release"
   },
   "devDependencies": {
@@ -87,6 +88,7 @@
   "build": {
     "appId": "com.rumankazi.noter",
     "productName": "Noter",
+    "copyright": "Copyright © 2025 ${author}",
     "directories": {
       "output": "release"
     },
@@ -94,6 +96,9 @@
       "dist/**/*",
       "node_modules/**/*"
     ],
+    "extraMetadata": {
+      "main": "dist/main/main.js"
+    },
     "mac": {
       "category": "public.app-category.productivity",
       "target": [
@@ -111,9 +116,15 @@
         {
           "target": "dir"
         }
-      ]
+      ],
+      "sign": false,
+      "verifyUpdateCodeSignature": false
     },
     "linux": {
+      "category": "Office",
+      "description": "A lightweight, fast, cross-platform note-taking app that works offline",
+      "maintainer": "rumankazi",
+      "vendor": "rumankazi",
       "target": [
         {
           "target": "AppImage",
@@ -127,7 +138,12 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "desktop": {
+        "Name": "Noter",
+        "Comment": "A lightweight note-taking app",
+        "Categories": "Office;TextEditor;Utility;"
+      }
     }
   },
   "lint-staged": {
