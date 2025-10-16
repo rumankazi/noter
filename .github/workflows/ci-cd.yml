@@ -22,13 +22,10 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: latest
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: latest
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
 
@@ -65,13 +62,10 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: latest
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: latest
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
 
@@ -108,13 +102,10 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: latest
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
 
@@ -254,7 +245,7 @@ jobs:
             release/*.dmg
             release/*.AppImage
             release/*.deb
-          retention-days: 30
+          retention-days: 7
 
   release:
     needs:
@@ -268,16 +259,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
           cache: 'pnpm'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

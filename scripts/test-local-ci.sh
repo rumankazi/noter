@@ -88,7 +88,7 @@ fi
 
 echo
 
-# Test 4: Native E2E Tests (Windows)
+# Test 4: Native E2E Tests
 echo -e "${BLUE}4. Native E2E Tests (Windows)${NC}"
 if pnpm run test:e2e > /tmp/e2e-native.log 2>&1; then
     log_test_result "Native E2E Tests" "PASSED"
@@ -135,8 +135,25 @@ fi
 
 echo
 
-# Test 7: Container Validation (Build/Unit/Lint)
-echo -e "${BLUE}7. Container Validation${NC}"
+# Test 7: Docker windows E2E Tests
+echo -e "${BLUE}7. Docker Windows E2E Tests${NC}"
+echo "Setting up Windows CI simulation container..."
+if docker-compose -f docker/docker-compose.test.yml build test-windows > /tmp/docker-windows-build.log 2>&1; then
+    echo "Running Windows container tests..."
+    if timeout 300 pnpm run test:e2e:windows > /tmp/e2e-windows.log 2>&1; then
+        log_test_result "Docker Windows E2E" "PASSED"
+    else
+        log_test_result "Docker Windows E2E" "FAILED"
+        echo "Check /tmp/e2e-windows.log for details"
+    fi
+else
+    log_test_result "Docker Windows E2E" "FAILED"
+    echo "Docker build failed. Check /tmp/docker-windows-build.log for details"
+fi
+
+
+# Test 8: Container Validation (Build/Unit/Lint)
+echo -e "${BLUE}8. Container Validation${NC}"
 if bash scripts/validate-containers.sh > /tmp/container-validation.log 2>&1; then
     log_test_result "Container Validation" "PASSED"
 else
