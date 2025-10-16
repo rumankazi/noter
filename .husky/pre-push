@@ -1,0 +1,11 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🧪 Running tests before push..."
+echo "📋 Running unit tests..."
+pnpm test --passWithNoTests
+
+echo "🎭 Running E2E tests..."
+pnpm test:e2e
+
+echo "✅ All tests passed! Ready to push."
