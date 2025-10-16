@@ -347,23 +347,11 @@ jobs:
           # Skip code signing on CI for now
           CSC_IDENTITY_AUTO_DISCOVERY: false
 
-      - name: Package application (Windows)
-        if: matrix.os == 'windows-latest'
-        run: pnpm package:win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Package application (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        run: pnpm package:linux
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.artifact_path }}
+          path: ${{ matrix.artifact_patterns }}
           retention-days: 30
           if-no-files-found: error
 
