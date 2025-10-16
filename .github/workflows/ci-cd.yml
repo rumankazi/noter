@@ -323,6 +323,11 @@ jobs:
         with:
           path: release-artifacts
 
+      - name: Set up git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Run semantic release
         run: pnpm exec semantic-release
         env:
