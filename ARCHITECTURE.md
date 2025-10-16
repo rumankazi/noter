@@ -43,6 +43,7 @@ Noter follows a clean, layered architecture that promotes separation of concerns
 ## Process Architecture
 
 ### Main Process (Node.js)
+
 - **Responsibilities**: Window management, database operations, file system access
 - **Location**: `src/main/`
 - **Key Files**:
@@ -52,6 +53,7 @@ Noter follows a clean, layered architecture that promotes separation of concerns
   - `ipc/` - Inter-process communication handlers
 
 ### Renderer Process (React)
+
 - **Responsibilities**: User interface, user interactions, markdown rendering
 - **Location**: `src/renderer/`
 - **Key Files**:
@@ -64,11 +66,13 @@ Noter follows a clean, layered architecture that promotes separation of concerns
 ## Data Flow
 
 ### Note Creation Flow
+
 ```
 User Input → UI Component → IPC Call → Main Process Service → Database → Response → UI Update
 ```
 
 ### Auto-save Flow
+
 ```
 Focus Change → Debounced Save → IPC Call → Database Update → Success Response
 ```
@@ -78,6 +82,7 @@ Focus Change → Debounced Save → IPC Call → Database Update → Success Res
 ### Tables
 
 #### notes
+
 ```sql
 CREATE TABLE notes (
     id TEXT PRIMARY KEY,
@@ -91,6 +96,7 @@ CREATE TABLE notes (
 ```
 
 #### folders
+
 ```sql
 CREATE TABLE folders (
     id TEXT PRIMARY KEY,
@@ -103,6 +109,7 @@ CREATE TABLE folders (
 ```
 
 #### settings
+
 ```sql
 CREATE TABLE settings (
     key TEXT PRIMARY KEY,
@@ -114,22 +121,26 @@ CREATE TABLE settings (
 ## Key Design Principles
 
 ### 1. Separation of Concerns
+
 - **Domain Layer**: Pure business logic, no dependencies
 - **Application Layer**: Use cases and application services
 - **Infrastructure Layer**: External dependencies (database, file system)
 - **Presentation Layer**: UI components and user interactions
 
 ### 2. Dependency Inversion
+
 - High-level modules don't depend on low-level modules
 - Both depend on abstractions (interfaces)
 - Database implementations are injected via dependency injection
 
 ### 3. Single Responsibility
+
 - Each class/module has one reason to change
 - Services handle specific business operations
 - Components have focused UI responsibilities
 
 ### 4. Open/Closed Principle
+
 - Open for extension, closed for modification
 - Plugin architecture for future features
 - Interface-based design for swappable components
@@ -137,16 +148,19 @@ CREATE TABLE settings (
 ## Testing Strategy
 
 ### Unit Tests
+
 - **Domain Layer**: Test business logic in isolation
 - **Application Layer**: Test services with mocked dependencies
 - **UI Components**: Test component behavior and rendering
 
 ### Integration Tests
+
 - **Database Layer**: Test database operations with real SQLite
 - **IPC Communication**: Test main-renderer process communication
 - **Service Integration**: Test service interactions
 
 ### E2E Tests
+
 - **Cross-platform**: Test on Windows, macOS, Linux
 - **User Workflows**: Complete user journeys from start to finish
 - **Performance**: Ensure app meets performance requirements
@@ -154,11 +168,13 @@ CREATE TABLE settings (
 ## Security Considerations
 
 ### Data Protection
+
 - Local data storage only (no cloud by default)
 - SQLite database with file-system level permissions
 - No network communication (offline-first)
 
 ### Process Isolation
+
 - Main process handles sensitive operations
 - Renderer process runs in sandboxed environment
 - IPC validation for all communications
@@ -166,16 +182,19 @@ CREATE TABLE settings (
 ## Performance Optimizations
 
 ### Database
+
 - Indexed columns for fast search queries
 - Connection pooling for concurrent operations
 - Batch operations for bulk data changes
 
 ### UI
+
 - Virtual scrolling for large note lists
 - Debounced auto-save to prevent excessive writes
 - Lazy loading of note content
 
 ### Memory Management
+
 - Proper cleanup of event listeners
 - Efficient React rendering with useMemo/useCallback
 - Database connection management
@@ -183,16 +202,19 @@ CREATE TABLE settings (
 ## Extensibility Points
 
 ### Plugin System (Future)
+
 - Plugin interface for custom note types
 - Custom markdown renderers
 - External sync providers
 
 ### Theme System
+
 - CSS custom properties for theming
 - Dark/light mode support
 - Custom theme plugins
 
 ### Export/Import
+
 - Multiple format support (PDF, HTML, etc.)
 - Batch operations
 - Custom export templates
@@ -200,6 +222,7 @@ CREATE TABLE settings (
 ## Development Workflow
 
 ### Code Organization
+
 ```
 src/
 ├── main/                 # Electron main process
@@ -223,6 +246,7 @@ src/
 ```
 
 ### Build Process
+
 1. **TypeScript Compilation**: Main and renderer processes
 2. **Bundle Creation**: Vite for renderer, tsc for main
 3. **Electron Packaging**: electron-builder for distributables
@@ -231,20 +255,23 @@ src/
 ## Deployment Architecture
 
 ### Build Targets
+
 - **Windows**: NSIS installer + Portable executable
 - **macOS**: DMG (Universal: Intel + Apple Silicon)
 - **Linux**: AppImage + DEB package
 
 ### CI/CD Pipeline
+
 ```
 Code Push → Tests → Build → Package → Release → Deploy
 ```
 
 ### Release Strategy
+
 - **Semantic Versioning**: Automated version management
 - **Multiple Channels**: Stable, beta, alpha releases
 - **Auto-updates**: Built-in update mechanism
 
 ---
 
-*This document is maintained alongside code changes and reflects the current architecture state.*
+_This document is maintained alongside code changes and reflects the current architecture state._

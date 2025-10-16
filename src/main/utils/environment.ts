@@ -7,7 +7,9 @@
  * @returns {boolean} True if in development mode
  */
 export function isDev(): boolean {
-    return process.env.NODE_ENV === 'development' || process.argv.includes('--dev');
+  return (
+    process.env.NODE_ENV === 'development' || process.argv.includes('--dev')
+  );
 }
 
 /**
@@ -15,7 +17,7 @@ export function isDev(): boolean {
  * @returns {boolean} True if in production mode
  */
 export function isProd(): boolean {
-    return !isDev();
+  return !isDev();
 }
 
 /**
@@ -23,5 +25,5 @@ export function isProd(): boolean {
  * @returns {string} The current environment (development, production, test)
  */
 export function getEnvironment(): string {
-    return process.env.NODE_ENV || 'production';
+  return process.env.NODE_ENV || 'production';
 }

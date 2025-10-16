@@ -12,257 +12,268 @@ app.disableHardwareAcceleration();
  * Handles application lifecycle and window management
  */
 class NoterApplication {
-    private mainWindow: BrowserWindow | null = null;
+  private mainWindow: BrowserWindow | null = null;
 
-    constructor() {
-        this.initializeApp();
-    }
+  constructor() {
+    this.initializeApp();
+  }
 
-    /**
-     * Initialize the Electron application
-     */
-    private initializeApp(): void {
-        // Handle app ready event
-        app.whenReady().then(() => {
-            this.createMainWindow();
-            this.setupIpcHandlers();
+  /**
+   * Initialize the Electron application
+   */
+  private initializeApp(): void {
+    // Handle app ready event
+    app.whenReady().then(() => {
+      this.createMainWindow();
+      this.setupIpcHandlers();
 
-            app.on('activate', () => {
-                // On macOS, re-create window when dock icon is clicked
-                if (BrowserWindow.getAllWindows().length === 0) {
-                    this.createMainWindow();
-                }
-            });
-        });
-
-        // Handle window closed events
-        app.on('window-all-closed', () => {
-            // On macOS, keep app running even when all windows are closed
-            if (process.platform !== 'darwin') {
-                app.quit();
-            }
-        });
-    }
-
-    /**
-     * Create the main application window
-     */
-    private createMainWindow(): void {
-        // Simple window configuration to avoid rendering issues
-        const windowConfig: Electron.BrowserWindowConstructorOptions = {
-            width: 1200,
-            height: 800,
-            minWidth: 800,
-            minHeight: 600,
-            webPreferences: {
-                nodeIntegration: false,
-                contextIsolation: true,
-                preload: path.join(__dirname, 'preload.js')
-            },
-            show: false, // Don't show until ready
-            resizable: true,
-            maximizable: true,
-            minimizable: true,
-            closable: true,
-            fullscreenable: true
-        };
-
-        // Keep platform-specific configurations minimal to avoid rendering issues
-        if (process.platform === 'darwin') {
-            // macOS specific configurations - only add if needed
-            windowConfig.titleBarStyle = 'hiddenInset';
-            windowConfig.trafficLightPosition = { x: 20, y: 20 };
-        } else if (process.platform === 'linux') {
-            // Linux specific configurations
-            windowConfig.icon = path.join(__dirname, '../renderer/assets/icon.png');
+      app.on('activate', () => {
+        // On macOS, re-create window when dock icon is clicked
+        if (BrowserWindow.getAllWindows().length === 0) {
+          this.createMainWindow();
         }
-        // Windows uses default settings - no special configuration needed
+      });
+    });
 
-        this.mainWindow = new BrowserWindow(windowConfig);
+    // Handle window closed events
+    app.on('window-all-closed', () => {
+      // On macOS, keep app running even when all windows are closed
+      if (process.platform !== 'darwin') {
+        app.quit();
+      }
+    });
+  }
 
-        // Add debugging for renderer process
-        this.mainWindow.webContents.on('did-start-loading', () => {
-            console.log('Renderer: Started loading');
-        });
+  /**
+   * Create the main application window
+   */
+  private createMainWindow(): void {
+    // Simple window configuration to avoid rendering issues
+    const windowConfig: Electron.BrowserWindowConstructorOptions = {
+      width: 1200,
+      height: 800,
+      minWidth: 800,
+      minHeight: 600,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js'),
+      },
+      show: false, // Don't show until ready
+      resizable: true,
+      maximizable: true,
+      minimizable: true,
+      closable: true,
+      fullscreenable: true,
+    };
 
-        this.mainWindow.webContents.on('did-finish-load', () => {
-            console.log('Renderer: Finished loading');
-        });
+    // Keep platform-specific configurations minimal to avoid rendering issues
+    if (process.platform === 'darwin') {
+      // macOS specific configurations - only add if needed
+      windowConfig.titleBarStyle = 'hiddenInset';
+      windowConfig.trafficLightPosition = { x: 20, y: 20 };
+    } else if (process.platform === 'linux') {
+      // Linux specific configurations
+      windowConfig.icon = path.join(__dirname, '../renderer/assets/icon.png');
+    }
+    // Windows uses default settings - no special configuration needed
 
-        this.mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
-            console.error('Renderer: Failed to load', errorCode, errorDescription, validatedURL);
-        });
+    this.mainWindow = new BrowserWindow(windowConfig);
 
-        this.mainWindow.webContents.on('dom-ready', () => {
-            console.log('Renderer: DOM ready');
-        });
+    // Add debugging for renderer process
+    this.mainWindow.webContents.on('did-start-loading', () => {
+      console.log('Renderer: Started loading');
+    });
 
-        this.mainWindow.webContents.on('page-title-updated', (event, title) => {
-            console.log('Renderer: Page title updated to:', title);
-        });
+    this.mainWindow.webContents.on('did-finish-load', () => {
+      console.log('Renderer: Finished loading');
+    });
 
-        // Load the renderer process
-        if (isDev()) {
-            this.mainWindow.loadURL('http://localhost:3000');
-            this.mainWindow.webContents.openDevTools();
-        } else {
-            this.mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
-        }
+    this.mainWindow.webContents.on(
+      'did-fail-load',
+      (event, errorCode, errorDescription, validatedURL) => {
+        console.error(
+          'Renderer: Failed to load',
+          errorCode,
+          errorDescription,
+          validatedURL
+        );
+      }
+    );
 
-        // Show window when ready to prevent visual flash
-        this.mainWindow.once('ready-to-show', () => {
-            if (this.mainWindow) {
-                this.mainWindow.show();
-                this.mainWindow.focus();
-                console.log('Noter application started successfully');
-            }
-        });        // Handle window closed
-        this.mainWindow.on('closed', () => {
-            this.mainWindow = null;
-        });
+    this.mainWindow.webContents.on('dom-ready', () => {
+      console.log('Renderer: DOM ready');
+    });
 
-        // Handle window state changes
-        this.setupWindowStateHandlers();
+    this.mainWindow.webContents.on('page-title-updated', (event, title) => {
+      console.log('Renderer: Page title updated to:', title);
+    });
 
-        // Setup platform-specific menu
-        this.setupApplicationMenu();
+    // Load the renderer process
+    if (isDev()) {
+      this.mainWindow.loadURL('http://localhost:3000');
+      this.mainWindow.webContents.openDevTools();
+    } else {
+      this.mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
     }
 
-    /**
-     * Setup window state event handlers
-     */
-    private setupWindowStateHandlers(): void {
-        if (!this.mainWindow) return;
+    // Show window when ready to prevent visual flash
+    this.mainWindow.once('ready-to-show', () => {
+      if (this.mainWindow) {
+        this.mainWindow.show();
+        this.mainWindow.focus();
+        console.log('Noter application started successfully');
+      }
+    }); // Handle window closed
+    this.mainWindow.on('closed', () => {
+      this.mainWindow = null;
+    });
 
-        // Save window bounds when resized or moved
-        this.mainWindow.on('resize', () => {
-            if (this.mainWindow) {
-                const bounds = this.mainWindow.getBounds();
-                console.log('Window resized:', bounds);
-            }
-        });
+    // Handle window state changes
+    this.setupWindowStateHandlers();
 
-        this.mainWindow.on('move', () => {
-            if (this.mainWindow) {
-                const bounds = this.mainWindow.getBounds();
-                console.log('Window moved:', bounds);
-            }
-        });
+    // Setup platform-specific menu
+    this.setupApplicationMenu();
+  }
 
-        // Handle maximize/unmaximize
-        this.mainWindow.on('maximize', () => {
-            console.log('Window maximized');
-        });
+  /**
+   * Setup window state event handlers
+   */
+  private setupWindowStateHandlers(): void {
+    if (!this.mainWindow) return;
 
-        this.mainWindow.on('unmaximize', () => {
-            console.log('Window unmaximized');
-        });
+    // Save window bounds when resized or moved
+    this.mainWindow.on('resize', () => {
+      if (this.mainWindow) {
+        const bounds = this.mainWindow.getBounds();
+        console.log('Window resized:', bounds);
+      }
+    });
 
-        // Handle minimize/restore
-        this.mainWindow.on('minimize', () => {
-            console.log('Window minimized');
-        });
+    this.mainWindow.on('move', () => {
+      if (this.mainWindow) {
+        const bounds = this.mainWindow.getBounds();
+        console.log('Window moved:', bounds);
+      }
+    });
 
-        this.mainWindow.on('restore', () => {
-            console.log('Window restored');
-            // Ensure window is properly focused when restored
-            if (this.mainWindow) {
-                this.mainWindow.focus();
-            }
-        });
+    // Handle maximize/unmaximize
+    this.mainWindow.on('maximize', () => {
+      console.log('Window maximized');
+    });
+
+    this.mainWindow.on('unmaximize', () => {
+      console.log('Window unmaximized');
+    });
+
+    // Handle minimize/restore
+    this.mainWindow.on('minimize', () => {
+      console.log('Window minimized');
+    });
+
+    this.mainWindow.on('restore', () => {
+      console.log('Window restored');
+      // Ensure window is properly focused when restored
+      if (this.mainWindow) {
+        this.mainWindow.focus();
+      }
+    });
+  }
+
+  /**
+   * Setup platform-specific application menu
+   */
+  private setupApplicationMenu(): void {
+    if (process.platform === 'darwin') {
+      // macOS menu bar
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { Menu } = require('electron');
+      const template = [
+        {
+          label: 'Noter',
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideothers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' },
+          ],
+        },
+        {
+          label: 'File',
+          submenu: [
+            { label: 'New Note', accelerator: 'CmdOrCtrl+N' },
+            { type: 'separator' },
+            { role: 'close' },
+          ],
+        },
+        {
+          label: 'Edit',
+          submenu: [
+            { role: 'undo' },
+            { role: 'redo' },
+            { type: 'separator' },
+            { role: 'cut' },
+            { role: 'copy' },
+            { role: 'paste' },
+            { role: 'selectall' },
+          ],
+        },
+        {
+          label: 'View',
+          submenu: [
+            { role: 'reload' },
+            { role: 'forceReload' },
+            { role: 'toggleDevTools' },
+            { type: 'separator' },
+            { role: 'resetZoom' },
+            { role: 'zoomIn' },
+            { role: 'zoomOut' },
+            { type: 'separator' },
+            { role: 'togglefullscreen' },
+          ],
+        },
+        {
+          label: 'Window',
+          submenu: [
+            { role: 'minimize' },
+            { role: 'zoom' },
+            { type: 'separator' },
+            { role: 'front' },
+          ],
+        },
+      ];
+
+      const menu = Menu.buildFromTemplate(template);
+      Menu.setApplicationMenu(menu);
+    } else {
+      // Remove menu bar on Windows/Linux for cleaner look
+      this.mainWindow?.setMenuBarVisibility(false);
     }
+  }
 
-    /**
-     * Setup platform-specific application menu
-     */
-    private setupApplicationMenu(): void {
-        if (process.platform === 'darwin') {
-            // macOS menu bar
-            const { Menu } = require('electron');
-            const template = [
-                {
-                    label: 'Noter',
-                    submenu: [
-                        { role: 'about' },
-                        { type: 'separator' },
-                        { role: 'services' },
-                        { type: 'separator' },
-                        { role: 'hide' },
-                        { role: 'hideothers' },
-                        { role: 'unhide' },
-                        { type: 'separator' },
-                        { role: 'quit' }
-                    ]
-                },
-                {
-                    label: 'File',
-                    submenu: [
-                        { label: 'New Note', accelerator: 'CmdOrCtrl+N' },
-                        { type: 'separator' },
-                        { role: 'close' }
-                    ]
-                },
-                {
-                    label: 'Edit',
-                    submenu: [
-                        { role: 'undo' },
-                        { role: 'redo' },
-                        { type: 'separator' },
-                        { role: 'cut' },
-                        { role: 'copy' },
-                        { role: 'paste' },
-                        { role: 'selectall' }
-                    ]
-                },
-                {
-                    label: 'View',
-                    submenu: [
-                        { role: 'reload' },
-                        { role: 'forceReload' },
-                        { role: 'toggleDevTools' },
-                        { type: 'separator' },
-                        { role: 'resetZoom' },
-                        { role: 'zoomIn' },
-                        { role: 'zoomOut' },
-                        { type: 'separator' },
-                        { role: 'togglefullscreen' }
-                    ]
-                },
-                {
-                    label: 'Window',
-                    submenu: [
-                        { role: 'minimize' },
-                        { role: 'zoom' },
-                        { type: 'separator' },
-                        { role: 'front' }
-                    ]
-                }
-            ];
+  /**
+   * Setup IPC (Inter-Process Communication) handlers
+   */
+  private setupIpcHandlers(): void {
+    // Hello World IPC handler for testing
+    ipcMain.handle('app:get-version', () => {
+      return app.getVersion();
+    });
 
-            const menu = Menu.buildFromTemplate(template);
-            Menu.setApplicationMenu(menu);
-        } else {
-            // Remove menu bar on Windows/Linux for cleaner look
-            this.mainWindow?.setMenuBarVisibility(false);
-        }
-    }    /**
-     * Setup IPC (Inter-Process Communication) handlers
-     */
-    private setupIpcHandlers(): void {
-        // Hello World IPC handler for testing
-        ipcMain.handle('app:get-version', () => {
-            return app.getVersion();
-        });
+    ipcMain.handle('app:get-platform', () => {
+      return process.platform;
+    });
 
-        ipcMain.handle('app:get-platform', () => {
-            return process.platform;
-        });
-
-        // Graceful shutdown handler
-        ipcMain.handle('app:quit', () => {
-            app.quit();
-        });
-    }
+    // Graceful shutdown handler
+    ipcMain.handle('app:quit', () => {
+      app.quit();
+    });
+  }
 }
 
 // Create and start the application

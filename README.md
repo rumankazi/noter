@@ -17,10 +17,12 @@ A lightweight, fast, cross-platform note-taking app that works offline without r
 ## 🏗️ Development Setup
 
 ### Prerequisites
+
 - Node.js (v18 or higher)
 - pnpm (v8 or higher)
 
 ### Quick Start
+
 ```bash
 # Clone the repository
 git clone https://github.com/rumankazi/noter.git
@@ -37,6 +39,7 @@ pnpm run electron:dev
 ```
 
 ### Available Scripts
+
 - `pnpm run dev` - Start development server
 - `pnpm run build` - Build the app for production
 - `pnpm run start` - Build and run the app
@@ -50,6 +53,7 @@ pnpm run electron:dev
 ## 🧪 Testing
 
 This project follows Test-Driven Development (TDD):
+
 - Unit tests with Jest
 - E2E tests with Playwright
 - Tests run automatically in CI/CD
@@ -65,6 +69,7 @@ pnpm run test:e2e
 ## 🏛️ Architecture
 
 The app follows clean architecture principles:
+
 - **Main Process**: Electron main process (Node.js)
 - **Renderer Process**: React-based UI
 - **Database**: SQLite for offline storage
@@ -75,12 +80,14 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed architecture documentation
 ## 📦 Building & Distribution
 
 ### Development Builds
+
 ```bash
 pnpm run build
 pnpm run electron
 ```
 
 ### Production Builds
+
 ```bash
 # Build for current platform
 pnpm run dist
@@ -90,6 +97,7 @@ pnpm run dist:all
 ```
 
 ### Supported Formats
+
 - **Windows**: NSIS installer, Portable executable
 - **macOS**: DMG (Intel & Apple Silicon)
 - **Linux**: AppImage, DEB package
@@ -97,11 +105,13 @@ pnpm run dist:all
 ## 🚀 Deployment
 
 The project uses automated deployment:
+
 - **CI/CD**: GitHub Actions
 - **Releases**: Semantic Release
 - **Git Hooks**: Husky with commitlint
 
 Deployment happens automatically when:
+
 - PR is merged to main branch
 - Manual workflow dispatch on main branch
 
@@ -114,6 +124,7 @@ Deployment happens automatically when:
 5. All changes should include appropriate tests
 
 ### Commit Message Format
+
 ```
 type(scope): description
 

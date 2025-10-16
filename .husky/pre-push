@@ -8,4 +8,10 @@ pnpm test --passWithNoTests
 echo "🎭 Running E2E tests..."
 pnpm test:e2e
 
-echo "✅ All tests passed! Ready to push."
+echo "🧪 Running tests before push..."
+pnpm run test:unit
+if [ $? -ne 0 ]; then
+  echo "❌ Tests failed! Push cancelled."
+  exit 1
+fi
+echo "✅ All tests passed! Proceeding with push..."

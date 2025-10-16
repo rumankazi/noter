@@ -1,50 +1,48 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
-<head>
+  <head>
     <title>Debug Test</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(45deg, #ff0000, #00ff00) !important;
-            color: white !important;
-            font-family: Arial !important;
-            font-size: 48px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-align: center !important;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(45deg, #ff0000, #00ff00) !important;
+        color: white !important;
+        font-family: Arial !important;
+        font-size: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+      }
 
-        .content {
-            background: rgba(0, 0, 0, 0.8) !important;
-            padding: 50px !important;
-            border-radius: 20px !important;
-            border: 5px solid yellow !important;
-        }
+      .content {
+        background: rgba(0, 0, 0, 0.8) !important;
+        padding: 50px !important;
+        border-radius: 20px !important;
+        border: 5px solid yellow !important;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="content">
-        <h1>🎯 DIRECT HTML TEST 🎯</h1>
-        <p>If you see this colorful gradient,</p>
-        <p>HTML rendering is working!</p>
-        <p id="counter">Loading...</p>
+      <h1>🎯 DIRECT HTML TEST 🎯</h1>
+      <p>If you see this colorful gradient,</p>
+      <p>HTML rendering is working!</p>
+      <p id="counter">Loading...</p>
     </div>
 
     <script>
-        console.log('🔥 DIRECT HTML SCRIPT RUNNING 🔥');
-        let count = 0;
-        setInterval(() => {
-            count++;
-            document.getElementById('counter').textContent = `Counter: ${count}`;
-            console.log(`🔥 Counter: ${count}`);
-        }, 1000);
+      console.log('🔥 DIRECT HTML SCRIPT RUNNING 🔥');
+      let count = 0;
+      setInterval(() => {
+        count++;
+        document.getElementById('counter').textContent = `Counter: ${count}`;
+        console.log(`🔥 Counter: ${count}`);
+      }, 1000);
     </script>
-</body>
-
+  </body>
 </html>
