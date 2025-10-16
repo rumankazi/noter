@@ -10,6 +10,7 @@ on:
 env:
   CI: true
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skip browser downloads since we're testing Electron
+  HUSKY: 0 # Disable husky hooks during CI
 
 jobs:
   # Separate job for each platform to better isolate issues
@@ -323,6 +324,19 @@ jobs:
         with:
           path: release-artifacts
 
+      - name: Prepare release artifacts
+        run: |
+          # Create release directory
+          mkdir -p release
+
+          # Move all downloaded artifacts to release directory
+          # This flattens the artifact structure so semantic-release can find them
+          find release-artifacts -type f \( -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.zip" -o -name "*.tar.gz" \) -exec cp {} release/ \;
+
+          # List files for verification
+          echo "Files in release directory:"
+          ls -lh release/
+
       - name: Set up git user
         run: |
           git config --global user.name "github-actions[bot]"
@@ -331,5 +345,4 @@ jobs:
       - name: Run semantic release
         run: pnpm exec semantic-release
         env:
-          HUSKY: 0 # Disable husky hooks during CI release
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

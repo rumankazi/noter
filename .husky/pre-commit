@@ -1,2 +1,8 @@
+# Skip commit-msg validation in CI environments
+if [ "$CI" = "true" ] || [ "$GITHUB_ACTIONS" = "true" ]; then
+  echo "🤖 Running in CI - skipping commit-msg validation"
+  exit 0
+fi
+
 echo "🔍 Running lint-staged..."
 pnpm lint-staged
